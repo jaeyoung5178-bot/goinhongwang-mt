@@ -1,0 +1,2680 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>고인홍왕 MT · 사진 공유</title>
+<meta name="description" content="고인홍왕 MT 2026 여름 엠티 사진 공유 페이지">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --sky-top:#8ed6ff;
+    --sky-mid:#bdeaff;
+    --sea-1:#2fb5c4;
+    --sea-2:#1a8fb0;
+    --sea-3:#0f6f96;
+    --sand:#ffe9b3;
+    --sun:#ffd166;
+    --ink:#123047;
+    --ink-soft:#3a5a72;
+    --card-bg:#ffffff;
+    --accent:#ff6f61;
+    --accent-2:#06b6d4;
+    --glass-bg:rgba(255,255,255,0.55);
+    --glass-border:rgba(255,255,255,0.7);
+    --radius-lg:24px;
+    --radius-md:16px;
+    --radius-sm:10px;
+    --film-h-desktop:180px;
+    --film-h-tablet:140px;
+    --film-h-mobile:110px;
+    --sand-h-desktop:260px;
+    --sand-h-tablet:210px;
+    --sand-h-mobile:170px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;padding:0;
+    overflow-x:hidden;
+    width:100%;
+  }
+  body{
+    font-family:'Gowun Dodum','Jua',sans-serif;
+    color:var(--ink);
+    background:#eaf7fb;
+    line-height:1.5;
+  }
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;cursor:pointer;}
+  a{color:inherit;}
+
+  h1,h2,h3{font-family:'Black Han Sans',sans-serif;margin:0;letter-spacing:0.5px;}
+
+  .section-title{
+    text-align:center;
+    font-size:clamp(1.4rem,3.2vw,2.2rem);
+    color:var(--ink);
+    margin:0 0 1.2rem;
+  }
+
+  /* ---------- 안내 배너 (미리보기 모드) ---------- */
+  #config-banner{
+    display:none;
+    position:sticky;
+    top:0;
+    z-index:500;
+    background:linear-gradient(90deg,#ffe29f,#ffa99f);
+    color:#5c3a00;
+    text-align:center;
+    padding:10px 16px;
+    font-size:0.92rem;
+    font-weight:600;
+    box-shadow:0 2px 8px rgba(0,0,0,0.12);
+  }
+
+  /* ---------- 히어로 ---------- */
+  .hero{
+    position:relative;
+    min-height:88vh;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:linear-gradient(180deg,var(--sky-top) 0%,var(--sky-mid) 45%,var(--sea-1) 68%,var(--sea-2) 85%,var(--sea-3) 100%);
+    padding:40px 20px 0;
+  }
+
+  .sun{
+    position:absolute;
+    top:8%;
+    right:10%;
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,#fffdf0,var(--sun) 55%,#ffb347 100%);
+    box-shadow:0 0 100px 45px rgba(255,209,102,0.6);
+    z-index:1;
+    animation:pulseSun 4s ease-in-out infinite;
+  }
+  @keyframes pulseSun{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.06);}
+  }
+  .sun-glow{
+    position:absolute;
+    top:-6%;
+    right:-4%;
+    width:420px;
+    height:420px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(255,246,216,0.55) 0%,rgba(255,246,216,0.22) 45%,rgba(255,246,216,0) 72%);
+    z-index:1;
+    pointer-events:none;
+  }
+
+  /* ---------- 모래사장 ---------- */
+  .sand{
+    position:absolute;
+    left:0;right:0;
+    bottom:0;
+    height:var(--sand-h-desktop);
+    z-index:1;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .sand svg{display:block;width:100%;height:100%;}
+
+  /* ---------- 야자수 ---------- */
+  .palm{
+    position:absolute;
+    bottom:14px;
+    z-index:3;
+    pointer-events:none;
+    filter:drop-shadow(0 12px 16px rgba(0,50,30,0.28));
+  }
+  .palm svg{display:block;width:100%;height:auto;}
+  .palm.left{
+    left:-16px;
+    width:300px;
+    bottom:2px;
+    transform:scaleX(-1);
+  }
+  .palm.right{
+    right:-6px;
+    width:215px;
+    bottom:22px;
+  }
+  @keyframes frondSway{
+    0%,100%{transform:rotate(-3deg);}
+    50%{transform:rotate(3deg);}
+  }
+  .palm-crown-sway{
+    transform-origin:0 0;
+    animation:frondSway 4.6s ease-in-out infinite;
+  }
+  .palm.left .palm-crown-sway{animation-duration:5.3s;animation-delay:.25s;}
+  .palm.right .palm-crown-sway{animation-duration:4.2s;}
+
+  /* ---------- 모래사장 소품 ---------- */
+  .beach-props{
+    position:absolute;
+    inset:0;
+    z-index:3;
+    pointer-events:none;
+  }
+  .beach-props > *{
+    position:absolute;
+    display:block;
+  }
+  .crab{width:52px;}
+  .crab-1{left:9%;bottom:7%;animation:crabScuttle 6.4s ease-in-out infinite;}
+  .crab-2{left:63%;bottom:4.5%;width:42px;animation:crabScuttle 7.2s ease-in-out infinite reverse;}
+  @keyframes crabScuttle{
+    0%,100%{transform:translateX(0);}
+    25%{transform:translateX(14px);}
+    50%{transform:translateX(0);}
+    75%{transform:translateX(-14px);}
+  }
+  @keyframes clawWiggle{
+    0%,100%{transform:rotate(0deg);}
+    50%{transform:rotate(-10deg);}
+  }
+  .crab-claw-l,.crab-claw-r{transform-box:fill-box;transform-origin:70% 55%;animation:clawWiggle 1.3s ease-in-out infinite;}
+
+  .shell-1{left:22%;bottom:11%;width:38px;transform:rotate(12deg);}
+  .shell-2{left:36%;bottom:5.5%;width:34px;transform:rotate(-22deg);}
+  .shell-3{left:79%;bottom:9%;width:32px;transform:rotate(20deg);}
+  .starfish{left:50%;bottom:3.5%;width:40px;transform:rotate(-12deg);}
+  .drink{left:15%;bottom:15%;width:38px;}
+  .ball{left:85%;bottom:13%;width:44px;transform:rotate(-8deg);}
+
+  .floaties{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:3;
+  }
+  .floaties span{
+    position:absolute;
+    font-size:2rem;
+    animation:floatUp 6s ease-in-out infinite;
+    filter:drop-shadow(0 4px 4px rgba(0,0,0,0.15));
+  }
+  @keyframes floatUp{
+    0%,100%{transform:translateY(0) rotate(-4deg);}
+    50%{transform:translateY(-22px) rotate(6deg);}
+  }
+
+  /* ---------- 바다 위 떠오르는 방명록 ---------- */
+  #floating-msgs{
+    position:absolute;
+    left:0;right:0;
+    top:44%;
+    bottom:0;
+    z-index:3;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .float-msg{
+    position:absolute;
+    max-width:78vw;
+    animation:fmBob 3.4s ease-in-out infinite;
+    will-change:transform;
+  }
+  .float-msg-inner{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    flex-wrap:wrap;
+    max-width:min(70vw,320px);
+    padding:10px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.55);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.7);
+    box-shadow:0 8px 22px rgba(15,111,150,0.25);
+    color:var(--ink);
+    font-size:0.92rem;
+    line-height:1.4;
+    word-break:break-word;
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .float-msg-inner.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .float-msg-inner.leaving{
+    opacity:0;
+    transform:translateY(-26px);
+  }
+  .float-msg-inner .fm-name{font-weight:700;}
+  @keyframes fmBob{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-6px);}
+  }
+  @media (max-width:640px){
+    .float-msg-inner{font-size:0.76rem;padding:8px 12px;max-width:62vw;}
+  }
+
+  .hero-content{
+    position:relative;
+    z-index:4;
+    padding-bottom:70px;
+  }
+  .hero-title{
+    font-size:clamp(2.6rem,10vw,5.4rem);
+    color:#fff;
+    text-shadow:0 4px 0 rgba(0,60,90,0.25),0 10px 24px rgba(0,40,60,0.25);
+  }
+  .hero-subtitle{
+    margin-top:10px;
+    font-size:clamp(1rem,2.6vw,1.35rem);
+    color:#f2fbff;
+    font-weight:600;
+    text-shadow:0 2px 8px rgba(0,40,60,0.25);
+  }
+  .hero-cta{
+    margin-top:30px;
+    display:inline-block;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:16px 34px;
+    font-size:1.15rem;
+    font-family:'Jua',sans-serif;
+    border-radius:100px;
+    box-shadow:0 10px 24px rgba(255,111,97,0.45);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .hero-cta:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 14px 30px rgba(255,111,97,0.55);}
+  .hero-cta:active{transform:translateY(0) scale(0.98);}
+
+  .waves{
+    position:absolute;
+    left:0;right:0;bottom:0;
+    height:170px;
+    z-index:2;
+    overflow:hidden;
+  }
+  .wave-row{
+    position:absolute;
+    left:0;right:0;
+    overflow:hidden;
+    width:100%;
+    height:100%;
+  }
+  .wave-row svg{
+    display:block;
+    width:200%;
+    height:100%;
+    animation:waveMove 14s linear infinite;
+  }
+  .wave1 svg{animation-duration:16s;}
+  .wave2 svg{animation-duration:22s;animation-direction:reverse;}
+  .wave3 svg{animation-duration:28s;}
+  @keyframes waveMove{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+
+  /* ---------- 필름 스트립 갤러리 ---------- */
+  .filmstrip-section{
+    background:#0d0d0d;
+    padding:34px 0;
+  }
+  .filmstrip-section .section-title{color:#fff;}
+  .filmstrip-row{
+    position:relative;
+    overflow:hidden;
+    background:#1b1b1b;
+    height:var(--film-h-desktop);
+    margin:14px 0;
+    box-shadow:inset 0 0 30px rgba(0,0,0,0.6);
+  }
+  .filmstrip-row::before,
+  .filmstrip-row::after{
+    content:"";
+    position:absolute;
+    left:0;right:0;
+    height:16px;
+    z-index:5;
+    background:repeating-linear-gradient(90deg,#f4f4f4 0 12px,transparent 12px 28px);
+    opacity:0.9;
+  }
+  .filmstrip-row::before{top:6px;}
+  .filmstrip-row::after{bottom:6px;}
+
+  .filmstrip-track{
+    display:flex;
+    align-items:center;
+    height:100%;
+    width:max-content;
+    will-change:transform;
+    animation:filmScroll 46s linear infinite;
+    padding:0 8px;
+  }
+  .filmstrip-row.reverse .filmstrip-track{
+    animation-direction:reverse;
+    animation-duration:54s;
+  }
+  @keyframes filmScroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+  .filmstrip-row:hover .filmstrip-track{
+    animation-play-state:paused;
+  }
+
+  .film-card{
+    flex:0 0 auto;
+    height:calc(100% - 40px);
+    aspect-ratio:4/3;
+    margin:0 8px;
+    border-radius:8px;
+    overflow:hidden;
+    border:3px solid #f4f4f4;
+    box-shadow:0 6px 14px rgba(0,0,0,0.5);
+    background:#333;
+    cursor:pointer;
+    position:relative;
+  }
+  .film-card img{
+    width:100%;height:100%;object-fit:cover;
+  }
+  .film-card.placeholder{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:2.4rem;
+    cursor:default;
+  }
+
+  /* ---------- 업로드 섹션 ---------- */
+  .upload-section{
+    padding:60px 20px;
+    background:linear-gradient(180deg,#eaf7fb,#dff3f8);
+    display:flex;
+    justify-content:center;
+  }
+  .upload-card{
+    width:100%;
+    max-width:620px;
+    background:var(--glass-bg);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-radius:var(--radius-lg);
+    padding:32px;
+    box-shadow:0 12px 40px rgba(15,111,150,0.18);
+  }
+  .name-input{
+    width:100%;
+    padding:14px 16px;
+    border-radius:var(--radius-sm);
+    border:2px solid rgba(15,111,150,0.25);
+    background:rgba(255,255,255,0.8);
+    font-size:1rem;
+    font-family:inherit;
+    margin-bottom:18px;
+    outline:none;
+    transition:border-color .15s ease;
+  }
+  .name-input:focus{border-color:var(--accent-2);}
+
+  .dropzone{
+    border:3px dashed rgba(15,111,150,0.4);
+    border-radius:var(--radius-md);
+    padding:40px 20px;
+    text-align:center;
+    background:rgba(255,255,255,0.35);
+    transition:background .2s ease, border-color .2s ease;
+  }
+  .dropzone.dragover{
+    background:rgba(6,182,212,0.18);
+    border-color:var(--accent-2);
+  }
+  .dropzone p{margin:0 0 14px;font-size:1.02rem;color:var(--ink-soft);}
+  .select-btn{
+    background:var(--accent-2);
+    color:#fff;
+    border:none;
+    padding:14px 28px;
+    min-height:44px;
+    border-radius:100px;
+    font-size:1rem;
+    font-family:'Jua',sans-serif;
+    box-shadow:0 8px 18px rgba(6,182,212,0.35);
+    transition:transform .15s ease;
+  }
+  .select-btn:hover{transform:translateY(-2px);}
+  #file-input{display:none;}
+
+  .upload-btn-row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:12px;
+  }
+  .camera-btn{
+    background:linear-gradient(135deg,var(--accent),#ff9a6c);
+    color:#fff;
+    border:none;
+    padding:14px 28px;
+    min-height:44px;
+    border-radius:100px;
+    font-size:1rem;
+    font-family:'Jua',sans-serif;
+    box-shadow:0 8px 18px rgba(255,111,97,0.35);
+    transition:transform .15s ease;
+  }
+  .camera-btn:hover{transform:translateY(-2px);}
+  #camera-input{display:none;}
+
+  /* ---------- 플로팅 카메라 버튼 (FAB) ---------- */
+  .fab-camera{
+    position:fixed;
+    right:20px;
+    bottom:24px;
+    width:60px;
+    height:60px;
+    min-width:56px;
+    min-height:56px;
+    border-radius:50%;
+    border:none;
+    background:linear-gradient(135deg,var(--accent-2),var(--sea-2));
+    color:#fff;
+    font-size:1.6rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 10px 26px rgba(15,111,150,0.45);
+    z-index:600;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .fab-camera:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 14px 32px rgba(15,111,150,0.55);}
+  .fab-camera:active{transform:translateY(0) scale(0.96);}
+
+  /* ---------- 관리자 톱니바퀴 FAB ---------- */
+  .fab-admin{
+    position:fixed;
+    right:20px;
+    bottom:96px;
+    width:44px;
+    height:44px;
+    min-width:44px;
+    min-height:44px;
+    border-radius:50%;
+    border:none;
+    background:rgba(18,48,71,0.55);
+    color:#fff;
+    font-size:1.15rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 8px 20px rgba(15,111,150,0.35);
+    z-index:600;
+    transition:transform .18s ease, background .18s ease, box-shadow .18s ease;
+  }
+  .fab-admin:hover{transform:translateY(-2px) scale(1.05);}
+  .fab-admin:active{transform:translateY(0) scale(0.96);}
+  .fab-admin.active{
+    background:linear-gradient(135deg,var(--accent),#ff9a6c);
+    box-shadow:0 10px 24px rgba(255,111,97,0.45);
+  }
+
+  /* ---------- 관리자 비밀번호 모달 ---------- */
+  .admin-modal-overlay{
+    position:fixed;
+    inset:0;
+    z-index:1300;
+    background:rgba(5,15,25,0.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .admin-modal-overlay.open{display:flex;}
+  .admin-modal{
+    width:100%;
+    max-width:340px;
+    background:var(--card-bg);
+    border-radius:var(--radius-lg);
+    padding:26px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.35);
+  }
+  .admin-modal h3{
+    font-family:'Black Han Sans',sans-serif;
+    font-size:1.15rem;
+    margin-bottom:16px;
+    text-align:center;
+    color:var(--ink);
+  }
+  .admin-modal input[type="password"]{
+    width:100%;
+    padding:12px 14px;
+    border-radius:var(--radius-sm);
+    border:2px solid rgba(15,111,150,0.25);
+    font-size:1rem;
+    font-family:inherit;
+    margin-bottom:16px;
+    outline:none;
+    box-sizing:border-box;
+  }
+  .admin-modal input[type="password"]:focus{border-color:var(--accent-2);}
+  .admin-modal-btn-row{display:flex;gap:10px;}
+  .admin-modal-btn-row button{
+    flex:1;
+    min-height:44px;
+    border:none;
+    border-radius:100px;
+    font-family:'Jua',sans-serif;
+    font-size:0.95rem;
+  }
+  .admin-modal-confirm{background:var(--accent-2);color:#fff;}
+  .admin-modal-cancel{background:rgba(15,111,150,0.12);color:var(--ink);}
+  .admin-modal-off-btn{
+    width:100%;
+    min-height:44px;
+    border:none;
+    border-radius:100px;
+    background:rgba(255,111,97,0.18);
+    color:#b3311f;
+    font-family:'Jua',sans-serif;
+    font-size:0.95rem;
+  }
+  .admin-toggle-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:16px;
+    padding:8px 4px;
+  }
+  .admin-toggle-label{font-size:0.92rem;color:var(--ink);}
+  .admin-toggle-switch{
+    position:relative;
+    width:50px;
+    height:28px;
+    min-width:50px;
+    min-height:28px;
+    border-radius:100px;
+    border:none;
+    background:rgba(15,111,150,0.25);
+    padding:0;
+    flex-shrink:0;
+    transition:background .2s ease;
+  }
+  .admin-toggle-switch.on{background:var(--accent-2);}
+  .admin-toggle-knob{
+    position:absolute;
+    top:3px;left:3px;
+    width:22px;height:22px;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 2px 6px rgba(0,0,0,0.25);
+    transition:transform .2s ease;
+  }
+  .admin-toggle-switch.on .admin-toggle-knob{transform:translateX(22px);}
+
+  .upload-progress{
+    margin-top:18px;
+    display:none;
+  }
+  .upload-progress.show{display:block;}
+  .upload-progress p{
+    margin:0 0 8px;
+    font-size:0.95rem;
+    color:var(--ink-soft);
+    text-align:center;
+    font-weight:600;
+  }
+  .progress-bar-outer{
+    height:10px;
+    border-radius:6px;
+    background:rgba(15,111,150,0.15);
+    overflow:hidden;
+  }
+  .progress-bar-inner{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--accent-2),var(--accent));
+    transition:width .25s ease;
+  }
+
+  /* ---------- 전체 갤러리 그리드 ---------- */
+  .gallery-section{
+    padding:60px 20px 80px;
+    background:#eaf7fb;
+  }
+  .gallery-counter{
+    text-align:center;
+    font-size:1.1rem;
+    font-weight:700;
+    color:var(--ink-soft);
+    margin-bottom:26px;
+  }
+  .gallery-header{
+    max-width:1200px;
+    margin:0 auto 26px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+  }
+  .gallery-header .gallery-counter{margin-bottom:0;}
+  .download-all-btn{
+    background:linear-gradient(135deg,var(--sea-2),var(--accent-2));
+    color:#fff;
+    border:none;
+    padding:12px 24px;
+    min-height:44px;
+    border-radius:100px;
+    font-size:0.95rem;
+    font-family:'Jua',sans-serif;
+    box-shadow:0 8px 18px rgba(15,111,150,0.3);
+    transition:transform .15s ease, opacity .15s ease;
+    white-space:nowrap;
+  }
+  .download-all-btn:hover{transform:translateY(-2px);}
+  .download-all-btn:disabled{opacity:0.7;cursor:default;transform:none;}
+  .gallery-grid{
+    max-width:1200px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+  }
+  .grid-card{
+    position:relative;
+    background:var(--card-bg);
+    border-radius:var(--radius-md);
+    overflow:hidden;
+    box-shadow:0 8px 20px rgba(15,111,150,0.16);
+    aspect-ratio:1/1;
+    cursor:pointer;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .grid-card:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(15,111,150,0.24);}
+  .grid-card img{width:100%;height:100%;object-fit:cover;}
+  .grid-card.placeholder{
+    display:flex;align-items:center;justify-content:center;
+    font-size:2.8rem;cursor:default;
+  }
+  .grid-card.placeholder:hover{transform:none;}
+  .grid-card-info{
+    position:absolute;
+    left:0;right:0;bottom:0;
+    padding:8px 10px;
+    background:linear-gradient(0deg,rgba(0,0,0,0.65),transparent);
+    color:#fff;
+    display:flex;
+    justify-content:space-between;
+    font-size:0.78rem;
+    gap:6px;
+  }
+  .grid-card-info .uploader-name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .grid-card-info .upload-time{opacity:0.9;flex-shrink:0;}
+
+  .grid-card-delete{
+    position:absolute;
+    top:8px;
+    right:8px;
+    width:32px;
+    height:32px;
+    min-width:32px;
+    min-height:32px;
+    border-radius:50%;
+    border:none;
+    background:rgba(0,0,0,0.55);
+    color:#fff;
+    font-size:0.95rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2;
+  }
+  .grid-card-confirm{
+    position:absolute;
+    inset:0;
+    background:rgba(5,15,25,0.75);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    color:#fff;
+    text-align:center;
+    padding:10px;
+    z-index:3;
+    font-size:0.85rem;
+  }
+  .grid-card-confirm .confirm-btn-row{display:flex;gap:8px;}
+  .grid-card-confirm button{
+    border:none;
+    border-radius:100px;
+    padding:8px 14px;
+    min-height:36px;
+    font-size:0.8rem;
+    font-family:inherit;
+  }
+  .grid-card-confirm .confirm-yes{background:var(--accent);color:#fff;}
+  .grid-card-confirm .confirm-no{background:rgba(255,255,255,0.85);color:var(--ink);}
+
+  /* ---------- 방명록 섹션 ---------- */
+  .guestbook-section{
+    padding:60px 20px 80px;
+    background:linear-gradient(180deg,#dff3f8,#eaf7fb);
+  }
+  .guestbook-wrap{
+    max-width:700px;
+    margin:0 auto;
+  }
+  .guestbook-form{
+    background:var(--glass-bg);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-radius:var(--radius-lg);
+    padding:28px;
+    box-shadow:0 12px 40px rgba(15,111,150,0.18);
+    margin-bottom:30px;
+  }
+  .guestbook-form input[type="text"],
+  .guestbook-form textarea{
+    width:100%;
+    padding:14px 16px;
+    border-radius:var(--radius-sm);
+    border:2px solid rgba(15,111,150,0.25);
+    background:rgba(255,255,255,0.8);
+    font-size:1rem;
+    font-family:inherit;
+    outline:none;
+    transition:border-color .15s ease;
+    resize:vertical;
+    box-sizing:border-box;
+  }
+  .guestbook-form input[type="text"]:focus,
+  .guestbook-form textarea:focus{border-color:var(--accent-2);}
+  .guestbook-name-input{margin-bottom:14px;}
+  .guestbook-msg-input{min-height:90px;margin-bottom:6px;}
+  .guestbook-char-count{
+    text-align:right;
+    font-size:0.82rem;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+  }
+  .guestbook-submit-btn{
+    display:block;
+    margin:0 auto;
+    background:linear-gradient(135deg,var(--accent),#ff9a6c);
+    color:#fff;
+    border:none;
+    padding:14px 34px;
+    min-height:44px;
+    border-radius:100px;
+    font-size:1rem;
+    font-family:'Jua',sans-serif;
+    box-shadow:0 8px 18px rgba(255,111,97,0.35);
+    transition:transform .15s ease;
+  }
+  .guestbook-submit-btn:hover{transform:translateY(-2px);}
+  .guestbook-off-notice{
+    display:none;
+    text-align:center;
+    background:rgba(255,111,97,0.14);
+    color:#b3311f;
+    padding:12px 16px;
+    border-radius:var(--radius-sm);
+    font-size:0.92rem;
+    font-weight:600;
+    margin-bottom:16px;
+  }
+  .guestbook-off-notice.show{display:block;}
+  .guestbook-form.disabled input,
+  .guestbook-form.disabled textarea,
+  .guestbook-form.disabled button{
+    opacity:0.5;
+    pointer-events:none;
+  }
+
+  .guestbook-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .guestbook-entry{
+    background:var(--card-bg);
+    border-radius:var(--radius-md);
+    padding:16px 18px;
+    box-shadow:0 6px 16px rgba(15,111,150,0.12);
+    display:flex;
+    gap:12px;
+  }
+  .guestbook-entry-icon{font-size:1.3rem;flex-shrink:0;line-height:1.4;}
+  .guestbook-entry-body{flex:1;min-width:0;}
+  .guestbook-entry-head{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:4px;
+  }
+  .guestbook-entry-name{font-weight:700;color:var(--ink);}
+  .guestbook-entry-time{font-size:0.8rem;color:var(--ink-soft);}
+  .guestbook-entry-edited{font-size:0.78rem;color:var(--ink-soft);opacity:0.75;}
+  .guestbook-entry-msg{
+    margin:0;
+    color:var(--ink);
+    white-space:pre-wrap;
+    word-break:break-word;
+    line-height:1.5;
+  }
+  .guestbook-entry-actions{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    margin-top:10px;
+  }
+  .guestbook-entry-actions span{font-size:0.85rem;color:var(--ink-soft);}
+  .guestbook-entry-actions button{
+    border:none;
+    border-radius:100px;
+    padding:8px 14px;
+    min-height:36px;
+    font-size:0.82rem;
+    font-family:inherit;
+    background:rgba(15,111,150,0.12);
+    color:var(--ink);
+    transition:background .15s ease;
+  }
+  .guestbook-entry-actions button:hover{background:rgba(15,111,150,0.22);}
+  .guestbook-entry-actions .danger-btn{background:rgba(255,111,97,0.18);color:#b3311f;}
+  .guestbook-entry-actions .danger-btn:hover{background:rgba(255,111,97,0.32);}
+  .guestbook-edit-textarea{
+    width:100%;
+    min-height:80px;
+    padding:10px 12px;
+    border-radius:var(--radius-sm);
+    border:2px solid rgba(15,111,150,0.25);
+    font-family:inherit;
+    font-size:0.95rem;
+    margin-top:6px;
+    resize:vertical;
+    box-sizing:border-box;
+  }
+  .guestbook-empty{
+    text-align:center;
+    color:var(--ink-soft);
+    padding:20px;
+  }
+
+  /* ---------- 라이트박스 ---------- */
+  .lightbox{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    background:rgba(5,15,25,0.92);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox-inner{
+    position:relative;
+    max-width:min(90vw,900px);
+    max-height:88vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .lightbox img{
+    max-width:100%;
+    max-height:72vh;
+    border-radius:var(--radius-sm);
+    box-shadow:0 20px 50px rgba(0,0,0,0.5);
+  }
+  .lightbox-meta{
+    color:#fff;
+    margin-top:14px;
+    text-align:center;
+    font-size:0.95rem;
+    opacity:0.9;
+  }
+  .lightbox-close{
+    position:absolute;
+    top:-46px;right:0;
+    background:rgba(255,255,255,0.15);
+    border:none;
+    color:#fff;
+    width:44px;height:44px;
+    border-radius:50%;
+    font-size:1.3rem;
+    line-height:1;
+  }
+  .lightbox-nav{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    background:rgba(255,255,255,0.15);
+    border:none;
+    color:#fff;
+    width:52px;height:52px;
+    border-radius:50%;
+    font-size:1.6rem;
+  }
+  .lightbox-nav.prev{left:-64px;}
+  .lightbox-nav.next{right:-64px;}
+  @media (max-width:900px){
+    .lightbox-nav.prev{left:6px;}
+    .lightbox-nav.next{right:6px;}
+    .lightbox-close{top:6px;right:6px;}
+  }
+
+  /* ---------- 토스트 ---------- */
+  #toast-container{
+    position:fixed;
+    left:50%;
+    bottom:28px;
+    transform:translateX(-50%);
+    z-index:1200;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    align-items:center;
+    pointer-events:none;
+  }
+  .toast{
+    background:rgba(18,48,71,0.95);
+    color:#fff;
+    padding:12px 20px;
+    border-radius:100px;
+    font-size:0.92rem;
+    box-shadow:0 8px 22px rgba(0,0,0,0.3);
+    opacity:0;
+    transform:translateY(10px);
+    transition:opacity .25s ease, transform .25s ease;
+    max-width:90vw;
+    text-align:center;
+  }
+  .toast.show{opacity:1;transform:translateY(0);}
+
+  /* ---------- 푸터 ---------- */
+  footer{
+    text-align:center;
+    padding:26px 20px;
+    background:#123047;
+    color:#dff3f8;
+    font-size:0.95rem;
+  }
+
+  /* ---------- 반응형 ---------- */
+  @media (max-width:1024px){
+    .filmstrip-row{height:var(--film-h-tablet);}
+    .gallery-grid{grid-template-columns:repeat(3,1fr);}
+    .sand{height:var(--sand-h-tablet);}
+    .palm.left{width:220px;}
+    .palm.right{width:165px;}
+    .shell-3,.ball{display:none;}
+  }
+  @media (max-width:640px){
+    .filmstrip-row{height:var(--film-h-mobile);}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);gap:12px;}
+    .hero{min-height:80vh;}
+    .sand{height:var(--sand-h-mobile);}
+    .palm.right{display:none;}
+    .palm.left{width:130px;left:-10px;bottom:0;}
+    .crab-2,.shell-2,.shell-3,.ball{display:none;}
+    .crab-1{width:40px;}
+    .shell-1{width:28px;}
+    .starfish{width:30px;}
+    .drink{width:30px;left:10%;bottom:10%;}
+    .select-btn,.hero-cta,.camera-btn,.download-all-btn{min-height:44px;}
+    .lightbox-nav{width:44px;height:44px;font-size:1.3rem;}
+    .upload-card{padding:22px;}
+    .upload-btn-row{gap:10px;}
+    .fab-camera{right:16px;bottom:18px;width:56px;height:56px;min-width:56px;min-height:56px;font-size:1.4rem;}
+    .fab-admin{right:16px;bottom:86px;}
+    .gallery-header{gap:10px;}
+    .guestbook-form{padding:20px;}
+    .guestbook-entry{padding:14px;}
+    .guestbook-entry-actions button{min-height:44px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .filmstrip-track,.wave-row svg,.floaties span,.sun,.palm-crown-sway,.crab,.crab-claw-l,.crab-claw-r,.float-msg{
+      animation-play-state:paused !important;
+      animation:none !important;
+    }
+    #floating-msgs{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="config-banner">⚙️ 아직 서버 연결 전이에요. 가이드 문서를 따라 Firebase 설정을 완료하면 사진 공유가 활성화됩니다.</div>
+
+<!-- ================= 히어로 ================= -->
+<section class="hero">
+  <div class="sun"></div>
+  <div class="sun-glow" aria-hidden="true"></div>
+
+  <div class="sand" aria-hidden="true">
+    <svg viewBox="0 0 1600 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sandGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f5e2b8"/>
+          <stop offset="100%" stop-color="#eed9a8"/>
+        </linearGradient>
+        <pattern id="sandDots" width="26" height="26" patternUnits="userSpaceOnUse">
+          <circle cx="4" cy="6" r="1.4" fill="#d9bd8a" opacity="0.5"/>
+          <circle cx="16" cy="14" r="1" fill="#d9bd8a" opacity="0.4"/>
+          <circle cx="10" cy="22" r="1.2" fill="#c9a86f" opacity="0.35"/>
+          <circle cx="22" cy="4" r="0.9" fill="#c9a86f" opacity="0.4"/>
+        </pattern>
+      </defs>
+      <path d="M0,120 C200,60 400,140 600,90 C800,40 1000,110 1200,70 C1350,40 1500,90 1600,60 L1600,300 L0,300 Z" fill="url(#sandGrad)"/>
+      <path d="M0,120 C200,60 400,140 600,90 C800,40 1000,110 1200,70 C1350,40 1500,90 1600,60 L1600,300 L0,300 Z" fill="url(#sandDots)"/>
+    </svg>
+  </div>
+
+  <svg class="palm left" viewBox="0 0 240 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="trunkGrad-l" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#8a5a2f"/>
+        <stop offset="45%" stop-color="#a9743f"/>
+        <stop offset="100%" stop-color="#5c3a1e"/>
+      </linearGradient>
+      <linearGradient id="leafGrad-l" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#c8f27a"/>
+        <stop offset="55%" stop-color="#4fbf4f"/>
+        <stop offset="100%" stop-color="#1f7a3d"/>
+      </linearGradient>
+      <radialGradient id="coconutGrad-l" cx="35%" cy="30%" r="70%">
+        <stop offset="0%" stop-color="#8a6a45"/>
+        <stop offset="70%" stop-color="#5c4022"/>
+        <stop offset="100%" stop-color="#3a2814"/>
+      </radialGradient>
+    </defs>
+
+    <path d="M108,318 C104,258 110,196 122,148 C129,118 140,98 150,88 L166,90 C154,102 142,124 135,152 C126,202 122,262 128,318 Z" fill="url(#trunkGrad-l)"/>
+    <path d="M112,300 Q120,296 128,300" stroke="#d8b374" stroke-width="3" fill="none" opacity="0.55"/>
+    <path d="M114,260 Q123,255 132,260" stroke="#d8b374" stroke-width="3" fill="none" opacity="0.5"/>
+    <path d="M118,215 Q126,210 134,215" stroke="#d8b374" stroke-width="3" fill="none" opacity="0.45"/>
+    <path d="M122,170 Q129,165 137,170" stroke="#d8b374" stroke-width="2.6" fill="none" opacity="0.4"/>
+
+    <g transform="translate(150,88)">
+      <g class="palm-crown-sway">
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-l)" transform="rotate(-85)"/>
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-l)" transform="rotate(-60)"/>
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-l)" transform="rotate(-38)"/>
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-l)" transform="rotate(-14)"/>
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-l)" transform="rotate(14)"/>
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-l)" transform="rotate(38)"/>
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-l)" transform="rotate(60)"/>
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-l)" transform="rotate(85)"/>
+
+        <circle cx="-4" cy="20" r="11" fill="url(#coconutGrad-l)"/>
+        <circle cx="12" cy="27" r="10" fill="url(#coconutGrad-l)"/>
+        <circle cx="-18" cy="32" r="9" fill="url(#coconutGrad-l)"/>
+        <ellipse cx="-7" cy="16" rx="3" ry="2" fill="#f4e4c1" opacity="0.7"/>
+        <ellipse cx="9" cy="23" rx="2.6" ry="1.8" fill="#f4e4c1" opacity="0.7"/>
+      </g>
+    </g>
+  </svg>
+
+  <svg class="palm right" viewBox="0 0 240 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="trunkGrad-r" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#8a5a2f"/>
+        <stop offset="45%" stop-color="#a9743f"/>
+        <stop offset="100%" stop-color="#5c3a1e"/>
+      </linearGradient>
+      <linearGradient id="leafGrad-r" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#c8f27a"/>
+        <stop offset="55%" stop-color="#4fbf4f"/>
+        <stop offset="100%" stop-color="#1f7a3d"/>
+      </linearGradient>
+      <radialGradient id="coconutGrad-r" cx="35%" cy="30%" r="70%">
+        <stop offset="0%" stop-color="#8a6a45"/>
+        <stop offset="70%" stop-color="#5c4022"/>
+        <stop offset="100%" stop-color="#3a2814"/>
+      </radialGradient>
+    </defs>
+
+    <path d="M108,318 C104,258 110,196 122,148 C129,118 140,98 150,88 L166,90 C154,102 142,124 135,152 C126,202 122,262 128,318 Z" fill="url(#trunkGrad-r)"/>
+    <path d="M112,300 Q120,296 128,300" stroke="#d8b374" stroke-width="3" fill="none" opacity="0.55"/>
+    <path d="M114,260 Q123,255 132,260" stroke="#d8b374" stroke-width="3" fill="none" opacity="0.5"/>
+    <path d="M118,215 Q126,210 134,215" stroke="#d8b374" stroke-width="3" fill="none" opacity="0.45"/>
+    <path d="M122,170 Q129,165 137,170" stroke="#d8b374" stroke-width="2.6" fill="none" opacity="0.4"/>
+
+    <g transform="translate(150,88)">
+      <g class="palm-crown-sway">
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-r)" transform="rotate(-85)"/>
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-r)" transform="rotate(-60)"/>
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-r)" transform="rotate(-38)"/>
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-r)" transform="rotate(-14)"/>
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-r)" transform="rotate(14)"/>
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-r)" transform="rotate(38)"/>
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-r)" transform="rotate(60)"/>
+        <path d="M0,0 C30,-14 70,-22 110,-14 C122,-12 130,-6 132,0 C124,2 112,2 100,-2 C112,6 124,12 130,18 C110,14 88,8 70,0 C82,10 96,20 104,30 C82,20 58,10 38,-2 C46,6 56,16 60,24 C40,12 18,0 0,0 Z" fill="url(#leafGrad-r)" transform="rotate(85)"/>
+
+        <circle cx="-4" cy="20" r="11" fill="url(#coconutGrad-r)"/>
+        <circle cx="12" cy="27" r="10" fill="url(#coconutGrad-r)"/>
+        <circle cx="-18" cy="32" r="9" fill="url(#coconutGrad-r)"/>
+        <ellipse cx="-7" cy="16" rx="3" ry="2" fill="#f4e4c1" opacity="0.7"/>
+        <ellipse cx="9" cy="23" rx="2.6" ry="1.8" fill="#f4e4c1" opacity="0.7"/>
+      </g>
+    </g>
+  </svg>
+
+  <div class="beach-props" aria-hidden="true">
+    <svg class="crab crab-1" viewBox="0 0 64 44">
+      <ellipse cx="32" cy="27" rx="17" ry="11" fill="#ff6b4a"/>
+      <ellipse cx="32" cy="22" rx="16" ry="8.5" fill="#ff8a65"/>
+      <line x1="24" y1="16" x2="19" y2="5" stroke="#e14e2b" stroke-width="2.6" stroke-linecap="round"/>
+      <line x1="40" y1="16" x2="45" y2="5" stroke="#e14e2b" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="19" cy="4" r="3" fill="#3a2313"/>
+      <circle cx="45" cy="4" r="3" fill="#3a2313"/>
+      <path d="M18,31 Q8,33 4,41" stroke="#e14e2b" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M21,35 Q13,41 9,47" stroke="#e14e2b" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M46,31 Q56,33 60,41" stroke="#e14e2b" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M43,35 Q51,41 55,47" stroke="#e14e2b" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <g class="crab-claw-l">
+        <path d="M17,23 Q4,19 2,10" stroke="#e14e2b" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <circle cx="2" cy="9" r="5.5" fill="#ff6b4a"/>
+      </g>
+      <g class="crab-claw-r">
+        <path d="M47,23 Q60,19 62,10" stroke="#e14e2b" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <circle cx="62" cy="9" r="5.5" fill="#ff6b4a"/>
+      </g>
+    </svg>
+    <svg class="crab crab-2" viewBox="0 0 64 44">
+      <ellipse cx="32" cy="27" rx="17" ry="11" fill="#ff9142"/>
+      <ellipse cx="32" cy="22" rx="16" ry="8.5" fill="#ffb27a"/>
+      <line x1="24" y1="16" x2="19" y2="5" stroke="#d9631a" stroke-width="2.6" stroke-linecap="round"/>
+      <line x1="40" y1="16" x2="45" y2="5" stroke="#d9631a" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="19" cy="4" r="3" fill="#3a2313"/>
+      <circle cx="45" cy="4" r="3" fill="#3a2313"/>
+      <path d="M18,31 Q8,33 4,41" stroke="#d9631a" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M21,35 Q13,41 9,47" stroke="#d9631a" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M46,31 Q56,33 60,41" stroke="#d9631a" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M43,35 Q51,41 55,47" stroke="#d9631a" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <g class="crab-claw-l">
+        <path d="M17,23 Q4,19 2,10" stroke="#d9631a" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <circle cx="2" cy="9" r="5.5" fill="#ff9142"/>
+      </g>
+      <g class="crab-claw-r">
+        <path d="M47,23 Q60,19 62,10" stroke="#d9631a" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <circle cx="62" cy="9" r="5.5" fill="#ff9142"/>
+      </g>
+    </svg>
+    <svg class="shell shell-1" viewBox="0 0 40 34">
+      <path d="M20,32 C8,30 2,20 4,10 C8,14 12,16 14,8 C16,15 18,17 20,9 C22,17 24,15 26,8 C28,16 32,14 36,10 C38,20 32,30 20,32 Z" fill="#ffd3e4"/>
+      <path d="M20,32 L20,10 M14,30 L16,10 M26,30 L24,10 M9,26 L13,11 M31,26 L27,11" stroke="#ff9fc0" stroke-width="1.2" fill="none"/>
+    </svg>
+    <svg class="shell shell-2" viewBox="0 0 34 34">
+      <path d="M17,30 C6,30 2,20 8,12 C13,6 24,7 26,15 C28,22 20,26 16,20 C13,15 18,12 20,16" fill="none" stroke="#f5b98a" stroke-width="4" stroke-linecap="round"/>
+      <ellipse cx="16" cy="19" rx="3.4" ry="2.4" fill="#fde3cf"/>
+    </svg>
+    <svg class="shell shell-3" viewBox="0 0 36 30">
+      <path d="M18,4 C28,6 34,16 32,26 L4,26 C2,16 8,6 18,4 Z" fill="#fff1e0"/>
+      <path d="M18,4 L18,26 M11,6 L14,26 M25,6 L22,26" stroke="#f2c9a0" stroke-width="1.2" fill="none"/>
+    </svg>
+    <svg class="starfish" viewBox="0 0 50 50">
+      <path d="M25,2 L31,18 L48,18 L34,29 L39,46 L25,35 L11,46 L16,29 L2,18 L19,18 Z" fill="#ff9e2c"/>
+      <circle cx="25" cy="25" r="3" fill="#ffcf8a"/>
+      <circle cx="25" cy="10" r="1.6" fill="#ffcf8a"/>
+      <circle cx="14" cy="30" r="1.6" fill="#ffcf8a"/>
+      <circle cx="36" cy="30" r="1.6" fill="#ffcf8a"/>
+    </svg>
+    <svg class="drink" viewBox="0 0 40 60">
+      <path d="M6,26 Q4,46 12,54 Q20,60 28,54 Q36,46 34,26 Q35,14 20,12 Q5,14 6,26 Z" fill="#6b4226"/>
+      <ellipse cx="20" cy="26" rx="14" ry="6" fill="#8a5a34"/>
+      <rect x="19" y="2" width="4" height="26" rx="2" fill="#ff6f61" transform="rotate(12 21 15)"/>
+      <path d="M12,4 a10,10 0 0 1 20,0 Z" fill="#ffd166"/>
+    </svg>
+    <svg class="ball" viewBox="0 0 50 50">
+      <circle cx="25" cy="25" r="23" fill="#fff"/>
+      <path d="M25,2 A23,23 0 0 1 46,25 L25,25 Z" fill="#ff6f61"/>
+      <path d="M25,2 A23,23 0 0 0 4,25 L25,25 Z" fill="#06b6d4"/>
+      <path d="M25,48 A23,23 0 0 1 4,25 L25,25 Z" fill="#ffd166"/>
+      <path d="M25,48 A23,23 0 0 0 46,25 L25,25 Z" fill="#43cea2"/>
+      <circle cx="25" cy="25" r="23" fill="none" stroke="#eee" stroke-width="1.5"/>
+    </svg>
+  </div>
+
+  <div class="floaties" id="floaties"></div>
+
+  <div id="floating-msgs" aria-hidden="true"></div>
+
+  <div class="hero-content">
+    <h1 class="hero-title">고인홍왕 MT</h1>
+    <p class="hero-subtitle">2026 여름 엠티 · 우리의 추억 저장소 🌊</p>
+    <button class="hero-cta" id="cta-upload">📸 사진 올리기</button>
+  </div>
+
+  <div class="waves">
+    <div class="wave-row wave1">
+      <svg viewBox="0 0 1600 170" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,90 C150,150 250,30 400,90 C550,150 650,30 800,90 C950,150 1050,30 1200,90 C1350,150 1450,30 1600,90 L1600,170 L0,170 Z" fill="#bfe9f7" opacity="0.55"/>
+        <path d="M1600,90 C1750,150 1850,30 2000,90 C2150,150 2250,30 2400,90 C2550,150 2650,30 2800,90 C2950,150 3050,30 3200,90 L3200,170 L1600,170 Z" fill="#bfe9f7" opacity="0.55"/>
+      </svg>
+    </div>
+    <div class="wave-row wave2">
+      <svg viewBox="0 0 1600 170" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,110 C180,50 320,150 500,100 C680,50 820,150 1000,100 C1180,50 1320,150 1600,100 L1600,170 L0,170 Z" fill="#3fb2c8" opacity="0.7"/>
+        <path d="M1600,100 C1780,50 1920,150 2100,100 C2280,50 2420,150 2600,100 C2780,50 2920,150 3200,100 L3200,170 L1600,170 Z" fill="#3fb2c8" opacity="0.7"/>
+      </svg>
+    </div>
+    <div class="wave-row wave3">
+      <svg viewBox="0 0 1600 170" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,130 C200,90 300,160 500,120 C700,80 800,160 1000,120 C1200,80 1300,160 1600,120 L1600,170 L0,170 Z" fill="#0f6f96"/>
+        <path d="M1600,120 C1800,80 1900,160 2100,120 C2300,80 2400,160 2600,120 C2800,80 2900,160 3200,120 L3200,170 L1600,170 Z" fill="#0f6f96"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 필름 스트립 갤러리 ================= -->
+<section class="filmstrip-section">
+  <h2 class="section-title">🎞️ 우리들의 필름</h2>
+  <div class="filmstrip-row" id="film-row-1">
+    <div class="filmstrip-track" id="film-track-1"></div>
+  </div>
+  <div class="filmstrip-row reverse" id="film-row-2">
+    <div class="filmstrip-track" id="film-track-2"></div>
+  </div>
+</section>
+
+<!-- ================= 업로드 섹션 ================= -->
+<section class="upload-section" id="upload-section">
+  <div class="upload-card">
+    <h2 class="section-title">사진 올리기 📤</h2>
+    <input type="text" class="name-input" id="name-input" placeholder="이름 (선택, 미입력 시 익명)" maxlength="20">
+    <div class="dropzone" id="dropzone">
+      <p>여기로 사진을 끌어다 놓거나<br>버튼을 눌러 선택해주세요</p>
+      <div class="upload-btn-row">
+        <button class="select-btn" id="select-btn" type="button">🖼️ 사진 선택</button>
+        <button class="camera-btn" id="camera-btn" type="button">📷 카메라로 찍기</button>
+      </div>
+      <input type="file" id="file-input" accept="image/*" multiple>
+      <input type="file" id="camera-input" accept="image/*" capture="environment">
+    </div>
+    <div class="upload-progress" id="upload-progress">
+      <p id="progress-text"></p>
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-bar"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 전체 갤러리 그리드 ================= -->
+<section class="gallery-section">
+  <h2 class="section-title">📚 전체 사진첩</h2>
+  <div class="gallery-header">
+    <p class="gallery-counter" id="gallery-counter">모인 추억 0장</p>
+    <button class="download-all-btn" id="download-all-btn" type="button">💾 전체 다운로드</button>
+  </div>
+  <div class="gallery-grid" id="gallery-grid"></div>
+</section>
+
+<!-- ================= 방명록 ================= -->
+<section class="guestbook-section" id="guestbook-section">
+  <h2 class="section-title">🏖️ 방명록 — 한마디씩 남겨요</h2>
+  <div class="guestbook-wrap">
+    <form class="guestbook-form" id="guestbook-form">
+      <p class="guestbook-off-notice" id="guestbook-off-notice">관리자가 방명록을 잠시 꺼두었어요 🙏</p>
+      <input type="text" class="guestbook-name-input" id="guestbook-name-input" placeholder="이름" maxlength="20" required>
+      <textarea class="guestbook-msg-input" id="guestbook-msg-input" placeholder="짧게 한마디! (30자)" maxlength="30" required></textarea>
+      <p class="guestbook-char-count" id="guestbook-char-count">0/30</p>
+      <button type="submit" class="guestbook-submit-btn">남기기 ✍️</button>
+    </form>
+    <div class="guestbook-list" id="guestbook-list"></div>
+  </div>
+</section>
+
+<!-- ================= 라이트박스 ================= -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" id="lightbox-close" aria-label="닫기">✕</button>
+    <button class="lightbox-nav prev" id="lightbox-prev" aria-label="이전 사진">‹</button>
+    <img id="lightbox-img" src="" alt="확대된 MT 사진">
+    <button class="lightbox-nav next" id="lightbox-next" aria-label="다음 사진">›</button>
+    <div class="lightbox-meta">
+      <span id="lightbox-name">익명</span> · <span id="lightbox-time">방금 전</span>
+    </div>
+  </div>
+</div>
+
+<button class="fab-admin" id="fab-admin" type="button" aria-label="관리자 모드">⚙️</button>
+<button class="fab-camera" id="fab-camera" type="button" aria-label="카메라로 촬영해서 올리기">📷</button>
+
+<div class="admin-modal-overlay" id="admin-modal-overlay">
+  <div class="admin-modal">
+    <div id="admin-modal-login">
+      <h3>관리자 비밀번호</h3>
+      <input type="password" id="admin-password-input" placeholder="비밀번호를 입력하세요" autocomplete="off">
+      <div class="admin-modal-btn-row">
+        <button type="button" class="admin-modal-cancel" id="admin-modal-cancel">취소</button>
+        <button type="button" class="admin-modal-confirm" id="admin-modal-confirm">확인</button>
+      </div>
+    </div>
+    <div id="admin-modal-active" style="display:none;">
+      <h3>관리자 모드 켜짐 🔧</h3>
+      <div class="admin-toggle-row" id="admin-toggle-row">
+        <span class="admin-toggle-label">🌊 바다 방명록 표시</span>
+        <button type="button" class="admin-toggle-switch" id="admin-guestbook-toggle" role="switch" aria-checked="true" aria-label="바다 방명록 표시 켜기/끄기">
+          <span class="admin-toggle-knob"></span>
+        </button>
+      </div>
+      <button type="button" class="admin-modal-off-btn" id="admin-modal-off">관리자 모드 끄기</button>
+      <div class="admin-modal-btn-row" style="margin-top:10px;">
+        <button type="button" class="admin-modal-cancel" id="admin-modal-close" style="flex:1;">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<footer>고인홍왕 MT 🌊 함께한 순간들</footer>
+
+<script type="module">
+/* =======================================================================
+   Firebase 설정 안내 (한국어)
+   -----------------------------------------------------------------------
+   아래 firebaseConfig 값을 본인의 Firebase 프로젝트 설정값으로 교체하세요.
+   Firebase 콘솔 > 프로젝트 설정 > "내 앱" 섹션의 웹 앱 설정에서 복사할 수
+   있습니다. 자세한 방법은 함께 제공된 "설정_및_배포_가이드.md" 문서를
+   참고하세요.
+
+   ⚠️ 이 프로젝트는 Firebase Storage를 사용하지 않습니다 (무료 Spark 요금제
+   에서는 Storage 사용이 제한됩니다). 대신 사진을 압축한 뒤 base64 데이터
+   URL 형태로 Firestore 문서에 직접 저장합니다.
+   ======================================================================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, onSnapshot,
+  query, orderBy, serverTimestamp, deleteDoc, updateDoc, doc, setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBPJw43uPmSWM4u5RF8TNADI40opl2ZgFk",
+  authDomain: "goinhongwang-mt.firebaseapp.com",
+  projectId: "goinhongwang-mt",
+  storageBucket: "goinhongwang-mt.firebasestorage.app",
+  messagingSenderId: "538609727013",
+  appId: "1:538609727013:web:a0bcb864f05d773f1331cc"
+};
+
+/* ⭐ 관리자 모드 비밀번호입니다. 배포 전 꼭 바꾸세요!
+   이 값은 페이지 소스 코드에 그대로 노출되므로 완전한 보안 수단은 아니에요.
+   "행사 중 실수로 남의 사진/글을 지우지 않게 막는 화면 잠금" 정도로만 사용하세요. */
+const ADMIN_PASSWORD = "0691"; // ⭐ 필요하면 바꾸세요
+
+/* firebaseConfig가 아직 채워지지 않았다면 "미리보기 모드"로 동작합니다. */
+const isConfigured = !!(firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith("여기에"));
+
+let app = null;
+let db = null;
+if (isConfigured) {
+  try {
+    app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+  } catch (err) {
+    console.error("Firebase 초기화 실패:", err);
+    db = null;
+  }
+}
+
+/* ================= 상태 ================= */
+let photos = []; // { id, img, name, createdAt }
+let isAdmin = false; // 메모리에만 유지 (localStorage 사용 안 함)
+const galleryUIState = {}; // photoId -> "confirm" | undefined
+
+/* ---- 바다 위 떠오르는 방명록 상태 ---- */
+let guestbookOn = true; // settings/site 문서의 guestbookOn (기본 ON)
+const prefersReducedMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+const FLOAT_SLOT_COUNT = 5;
+const FLOAT_DISPLAY_MS = 7000; // 슬롯 하나가 전체로 표시되는 시간
+const FLOAT_EXIT_MS = 600; // 퇴장 애니메이션 시간
+const FLOAT_SLOT_TOPS = [6, 24, 44, 64, 82]; // 컨테이너 기준 세로 위치(%)
+const FLOAT_SLOT_LEFTS = [8, 48, 18, 58, 32]; // 컨테이너 기준 가로 위치(%)
+let floatSlots = []; // { busy, timeoutId, el }
+let floatQueue = []; // FIFO 큐: { id, name, msg }
+const floatShownIds = new Set(); // 이미 큐에 넣은 방명록 doc id (중복 방지)
+let floatPreviewTimer = null;
+
+const PLACEHOLDER_ITEMS = [
+  { emoji: "🏖️", gradient: "linear-gradient(135deg,#ff9a8b,#ff6a88)" },
+  { emoji: "🍉", gradient: "linear-gradient(135deg,#43cea2,#185a9d)" },
+  { emoji: "⛱️", gradient: "linear-gradient(135deg,#f7971e,#ffd200)" },
+  { emoji: "🛟", gradient: "linear-gradient(135deg,#00c6ff,#0072ff)" },
+  { emoji: "🌊", gradient: "linear-gradient(135deg,#4facfe,#00f2fe)" },
+  { emoji: "🥽", gradient: "linear-gradient(135deg,#fa709a,#fee140)" },
+  { emoji: "🍹", gradient: "linear-gradient(135deg,#ff6e7f,#bfe9ff)" },
+  { emoji: "🐚", gradient: "linear-gradient(135deg,#a8edea,#fed6e3)" }
+];
+
+/* ================= DOM 참조 (DOMContentLoaded 이후 사용) ================= */
+let els = {};
+
+function initDom() {
+  els = {
+    banner: document.getElementById("config-banner"),
+    ctaUpload: document.getElementById("cta-upload"),
+    uploadSection: document.getElementById("upload-section"),
+    nameInput: document.getElementById("name-input"),
+    dropzone: document.getElementById("dropzone"),
+    selectBtn: document.getElementById("select-btn"),
+    fileInput: document.getElementById("file-input"),
+    cameraBtn: document.getElementById("camera-btn"),
+    cameraInput: document.getElementById("camera-input"),
+    fabCamera: document.getElementById("fab-camera"),
+    uploadProgress: document.getElementById("upload-progress"),
+    progressText: document.getElementById("progress-text"),
+    progressBar: document.getElementById("progress-bar"),
+    filmTrack1: document.getElementById("film-track-1"),
+    filmTrack2: document.getElementById("film-track-2"),
+    galleryGrid: document.getElementById("gallery-grid"),
+    galleryCounter: document.getElementById("gallery-counter"),
+    downloadAllBtn: document.getElementById("download-all-btn"),
+    lightbox: document.getElementById("lightbox"),
+    lightboxImg: document.getElementById("lightbox-img"),
+    lightboxName: document.getElementById("lightbox-name"),
+    lightboxTime: document.getElementById("lightbox-time"),
+    lightboxClose: document.getElementById("lightbox-close"),
+    lightboxPrev: document.getElementById("lightbox-prev"),
+    lightboxNext: document.getElementById("lightbox-next"),
+    toastContainer: document.getElementById("toast-container"),
+    floaties: document.getElementById("floaties"),
+    floatingMsgs: document.getElementById("floating-msgs"),
+    guestbookForm: document.getElementById("guestbook-form"),
+    guestbookOffNotice: document.getElementById("guestbook-off-notice"),
+    guestbookNameInput: document.getElementById("guestbook-name-input"),
+    guestbookMsgInput: document.getElementById("guestbook-msg-input"),
+    guestbookCharCount: document.getElementById("guestbook-char-count"),
+    guestbookList: document.getElementById("guestbook-list"),
+    fabAdmin: document.getElementById("fab-admin"),
+    adminModalOverlay: document.getElementById("admin-modal-overlay"),
+    adminModalLogin: document.getElementById("admin-modal-login"),
+    adminModalActive: document.getElementById("admin-modal-active"),
+    adminPasswordInput: document.getElementById("admin-password-input"),
+    adminModalCancel: document.getElementById("admin-modal-cancel"),
+    adminModalConfirm: document.getElementById("admin-modal-confirm"),
+    adminModalOff: document.getElementById("admin-modal-off"),
+    adminModalClose: document.getElementById("admin-modal-close"),
+    adminToggleRow: document.getElementById("admin-toggle-row"),
+    adminGuestbookToggle: document.getElementById("admin-guestbook-toggle")
+  };
+}
+
+/* ================= 토스트 ================= */
+function showToast(msg) {
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = msg;
+  els.toastContainer.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add("show"));
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 300);
+  }, 3200);
+}
+
+/* ================= 시간 표시 ================= */
+function timeAgo(ts) {
+  if (!ts) return "방금 전";
+  let date;
+  if (typeof ts.toDate === "function") date = ts.toDate();
+  else date = new Date(ts);
+  const diffSec = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (diffSec < 60) return "방금 전";
+  const diffMin = Math.floor(diffSec / 60);
+  if (diffMin < 60) return `${diffMin}분 전`;
+  const diffHour = Math.floor(diffMin / 60);
+  if (diffHour < 24) return `${diffHour}시간 전`;
+  const diffDay = Math.floor(diffHour / 24);
+  return `${diffDay}일 전`;
+}
+
+/* ================= 이미지 압축 ================= */
+function dataUrlSizeBytes(dataUrl) {
+  const base64 = dataUrl.split(",")[1] || "";
+  return Math.ceil(base64.length * 3 / 4);
+}
+
+function loadImageFallback(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(img);
+    };
+    img.onerror = (e) => {
+      URL.revokeObjectURL(url);
+      reject(e);
+    };
+    img.src = url;
+  });
+}
+
+async function fileToCompressedDataURL(file) {
+  try {
+    let source;
+    try {
+      source = await createImageBitmap(file, { imageOrientation: "from-image" });
+    } catch (e) {
+      source = await loadImageFallback(file);
+    }
+
+    let width = source.width;
+    let height = source.height;
+    const maxSide = 1200;
+    if (width > maxSide || height > maxSide) {
+      if (width > height) {
+        height = Math.round(height * (maxSide / width));
+        width = maxSide;
+      } else {
+        width = Math.round(width * (maxSide / height));
+        height = maxSide;
+      }
+    }
+
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(source, 0, 0, width, height);
+
+    let quality = 0.72;
+    let dataUrl = canvas.toDataURL("image/jpeg", quality);
+    while (dataUrlSizeBytes(dataUrl) > 900 * 1024 && quality > 0.4) {
+      quality = Math.round((quality - 0.1) * 100) / 100;
+      dataUrl = canvas.toDataURL("image/jpeg", quality);
+    }
+
+    if (dataUrlSizeBytes(dataUrl) > 900 * 1024) {
+      return null;
+    }
+    return dataUrl;
+  } catch (err) {
+    console.error("이미지 압축 실패:", err);
+    return null;
+  }
+}
+
+/* ================= 업로드 처리 ================= */
+async function handleFiles(fileList) {
+  if (!isConfigured || !db) {
+    showToast("⚙️ 아직 서버 연결 전이에요. 가이드를 따라 설정을 완료해주세요!");
+    return;
+  }
+  const files = Array.from(fileList).filter((f) => f.type.startsWith("image/"));
+  if (files.length === 0) {
+    showToast("이미지 파일을 선택해주세요.");
+    return;
+  }
+
+  const name = els.nameInput.value.trim() || "익명";
+  els.uploadProgress.classList.add("show");
+  let successCount = 0;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    els.progressText.textContent = `${files.length}장 중 ${i + 1}장 업로드 중…`;
+    els.progressBar.style.width = `${Math.round(((i) / files.length) * 100)}%`;
+
+    const dataUrl = await fileToCompressedDataURL(file);
+    if (!dataUrl) {
+      showToast(`"${file.name}" 파일은 저장할 수 없어요 (형식 또는 용량 문제) 😢`);
+      continue;
+    }
+
+    try {
+      await addDoc(collection(db, "photos"), {
+        img: dataUrl,
+        name: name,
+        createdAt: serverTimestamp()
+      });
+      successCount++;
+    } catch (err) {
+      console.error("업로드 실패:", err);
+      showToast("업로드 중 오류가 발생했어요 😢");
+    }
+    els.progressBar.style.width = `${Math.round(((i + 1) / files.length) * 100)}%`;
+  }
+
+  setTimeout(() => {
+    els.uploadProgress.classList.remove("show");
+    els.progressBar.style.width = "0%";
+  }, 500);
+
+  if (successCount > 0) {
+    showToast("추억이 저장됐어요! 🎉");
+  }
+  els.fileInput.value = "";
+}
+
+/* ================= 전체 다운로드 (ZIP) ================= */
+const JSZIP_SRC = "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
+let jszipLoadPromise = null;
+
+function loadJSZip() {
+  if (window.JSZip) return Promise.resolve(window.JSZip);
+  if (jszipLoadPromise) return jszipLoadPromise;
+  jszipLoadPromise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = JSZIP_SRC;
+    script.onload = () => {
+      if (window.JSZip) resolve(window.JSZip);
+      else reject(new Error("JSZip 로드 실패"));
+    };
+    script.onerror = () => {
+      jszipLoadPromise = null;
+      reject(new Error("JSZip 로드 실패"));
+    };
+    document.head.appendChild(script);
+  });
+  return jszipLoadPromise;
+}
+
+function sanitizeFilenamePart(str) {
+  if (!str) return "";
+  return str
+    .normalize("NFC")
+    .replace(/[\\/:*?"<>|]+/g, "")
+    .replace(/\s+/g, "_")
+    .trim();
+}
+
+function formatTimestampForFilename(ts) {
+  let date;
+  if (ts && typeof ts.toDate === "function") date = ts.toDate();
+  else if (ts) date = new Date(ts);
+  else date = new Date();
+  if (isNaN(date.getTime())) date = new Date();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  const hh = String(date.getHours()).padStart(2, "0");
+  const mi = String(date.getMinutes()).padStart(2, "0");
+  return `${mm}${dd}-${hh}${mi}`;
+}
+
+function dataURLToUint8Array(dataUrl) {
+  const base64 = dataUrl.split(",")[1] || "";
+  const binaryStr = atob(base64);
+  const len = binaryStr.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) bytes[i] = binaryStr.charCodeAt(i);
+  return bytes;
+}
+
+async function handleDownloadAll() {
+  if (!isConfigured || !db) {
+    showToast("⚙️ 아직 서버 연결 전이에요. 가이드를 따라 설정을 완료해주세요!");
+    return;
+  }
+  if (photos.length === 0) {
+    showToast("아직 사진이 없어요 📭");
+    return;
+  }
+
+  const originalText = els.downloadAllBtn.textContent;
+  els.downloadAllBtn.disabled = true;
+  els.downloadAllBtn.textContent = "준비 중…";
+
+  try {
+    const JSZip = await loadJSZip();
+    const zip = new JSZip();
+
+    /* photos는 최신순(desc)이라 업로드순으로 다시 뒤집는다 */
+    const ordered = photos.slice().reverse();
+    const total = ordered.length;
+
+    ordered.forEach((photo, idx) => {
+      const num = String(idx + 1).padStart(3, "0");
+      const namePart = sanitizeFilenamePart(photo.name) || "익명";
+      const timePart = formatTimestampForFilename(photo.createdAt);
+      const filename = `${num}_${namePart}_${timePart}.jpg`;
+      try {
+        const bytes = dataURLToUint8Array(photo.img);
+        zip.file(filename, bytes);
+      } catch (e) {
+        console.error(`"${filename}" 변환 실패:`, e);
+      }
+    });
+
+    els.downloadAllBtn.textContent = `묶는 중… 0/${total}`;
+
+    const blob = await zip.generateAsync({ type: "blob" }, (metadata) => {
+      const done = Math.min(total, Math.round((metadata.percent / 100) * total));
+      els.downloadAllBtn.textContent = `묶는 중… ${done}/${total}`;
+    });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "고인홍왕MT_사진모음.zip";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+
+    showToast("전체 사진을 zip으로 저장했어요! 🎉");
+  } catch (err) {
+    console.error("zip 생성 실패:", err);
+    showToast("압축 파일을 만들지 못했어요 😢");
+  } finally {
+    els.downloadAllBtn.disabled = false;
+    els.downloadAllBtn.textContent = originalText;
+  }
+}
+
+/* ================= 필름 스트립 렌더링 ================= */
+function padToMin(arr, min) {
+  if (arr.length === 0) return [];
+  const out = [];
+  let i = 0;
+  while (out.length < min) {
+    out.push(arr[i % arr.length]);
+    i++;
+  }
+  return out;
+}
+
+function buildFilmCard(item) {
+  const card = document.createElement("div");
+  if (item.type === "photo") {
+    card.className = "film-card";
+    const img = document.createElement("img");
+    img.src = item.data.img;
+    img.alt = "MT 사진";
+    img.loading = "lazy";
+    card.appendChild(img);
+    card.addEventListener("click", () => {
+      const idx = photos.findIndex((p) => p.id === item.data.id);
+      if (idx !== -1) openLightbox(idx);
+    });
+  } else {
+    card.className = "film-card placeholder";
+    card.style.background = item.data.gradient;
+    card.textContent = item.data.emoji;
+    card.addEventListener("click", () => {
+      if (!isConfigured) {
+        showToast("👀 미리보기용 이미지예요. 실제 사진은 아니랍니다.");
+      }
+    });
+  }
+  return card;
+}
+
+function renderFilmStrip() {
+  let baseItems;
+  if (photos.length > 0) {
+    baseItems = padToMin(photos, 8).map((p) => ({ type: "photo", data: p }));
+  } else {
+    baseItems = padToMin(PLACEHOLDER_ITEMS, 8).map((p) => ({ type: "placeholder", data: p }));
+  }
+
+  const row1Items = baseItems.concat(baseItems);
+  const row2Base = baseItems.slice().reverse();
+  const row2Items = row2Base.concat(row2Base);
+
+  els.filmTrack1.innerHTML = "";
+  row1Items.forEach((item) => els.filmTrack1.appendChild(buildFilmCard(item)));
+
+  els.filmTrack2.innerHTML = "";
+  row2Items.forEach((item) => els.filmTrack2.appendChild(buildFilmCard(item)));
+}
+
+/* ================= 전체 그리드 렌더링 ================= */
+function renderGrid() {
+  els.galleryGrid.innerHTML = "";
+
+  if (photos.length > 0) {
+    photos.forEach((photo, idx) => {
+      const card = document.createElement("div");
+      card.className = "grid-card";
+      const img = document.createElement("img");
+      img.src = photo.img;
+      img.alt = "MT 사진";
+      img.loading = "lazy";
+      card.appendChild(img);
+
+      const info = document.createElement("div");
+      info.className = "grid-card-info";
+      const nameSpan = document.createElement("span");
+      nameSpan.className = "uploader-name";
+      nameSpan.textContent = photo.name || "익명"; // XSS 방지: textContent만 사용
+      const timeSpan = document.createElement("span");
+      timeSpan.className = "upload-time";
+      timeSpan.textContent = timeAgo(photo.createdAt);
+      info.appendChild(nameSpan);
+      info.appendChild(timeSpan);
+      card.appendChild(info);
+
+      card.addEventListener("click", () => {
+        if (galleryUIState[photo.id]) return; // 삭제 확인 중엔 라이트박스를 열지 않음
+        openLightbox(idx);
+      });
+
+      if (isAdmin && isConfigured) {
+        if (galleryUIState[photo.id] === "confirm") {
+          const confirmOverlay = document.createElement("div");
+          confirmOverlay.className = "grid-card-confirm";
+          confirmOverlay.addEventListener("click", (e) => e.stopPropagation());
+
+          const text = document.createElement("span");
+          text.textContent = "정말 삭제할까요?";
+          confirmOverlay.appendChild(text);
+
+          const row = document.createElement("div");
+          row.className = "confirm-btn-row";
+
+          const yesBtn = document.createElement("button");
+          yesBtn.type = "button";
+          yesBtn.className = "confirm-yes";
+          yesBtn.textContent = "삭제";
+          yesBtn.addEventListener("click", async () => {
+            try {
+              await deleteDoc(doc(db, "photos", photo.id));
+              delete galleryUIState[photo.id];
+              showToast("사진을 삭제했어요 🗑️");
+            } catch (err) {
+              console.error("사진 삭제 실패:", err);
+              showToast("삭제 중 오류가 발생했어요 😢");
+            }
+          });
+
+          const noBtn = document.createElement("button");
+          noBtn.type = "button";
+          noBtn.className = "confirm-no";
+          noBtn.textContent = "취소";
+          noBtn.addEventListener("click", () => {
+            delete galleryUIState[photo.id];
+            renderGrid();
+          });
+
+          row.appendChild(yesBtn);
+          row.appendChild(noBtn);
+          confirmOverlay.appendChild(row);
+          card.appendChild(confirmOverlay);
+        } else {
+          const deleteBtn = document.createElement("button");
+          deleteBtn.type = "button";
+          deleteBtn.className = "grid-card-delete";
+          deleteBtn.textContent = "🗑️";
+          deleteBtn.setAttribute("aria-label", "사진 삭제");
+          deleteBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            galleryUIState[photo.id] = "confirm";
+            renderGrid();
+          });
+          card.appendChild(deleteBtn);
+        }
+      }
+
+      els.galleryGrid.appendChild(card);
+    });
+    els.galleryCounter.textContent = `모인 추억 ${photos.length}장`;
+  } else if (!isConfigured) {
+    PLACEHOLDER_ITEMS.forEach((item) => {
+      const card = document.createElement("div");
+      card.className = "grid-card placeholder";
+      card.style.background = item.gradient;
+      card.textContent = item.emoji;
+      card.addEventListener("click", () => {
+        showToast("👀 미리보기용 이미지예요. 실제 사진은 아니랍니다.");
+      });
+      els.galleryGrid.appendChild(card);
+    });
+    els.galleryCounter.textContent = "미리보기 모드 🌊 (사진 업로드 비활성화)";
+  } else {
+    els.galleryCounter.textContent = "모인 추억 0장 · 첫 사진을 올려보세요!";
+  }
+}
+
+function renderAll() {
+  renderFilmStrip();
+  renderGrid();
+}
+
+/* ================= 라이트박스 ================= */
+let currentIndex = 0;
+let touchStartX = null;
+
+function openLightbox(idx) {
+  if (photos.length === 0) return;
+  currentIndex = idx;
+  updateLightboxImage();
+  els.lightbox.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeLightbox() {
+  els.lightbox.classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function updateLightboxImage() {
+  const p = photos[currentIndex];
+  if (!p) return;
+  els.lightboxImg.src = p.img;
+  els.lightboxName.textContent = p.name || "익명";
+  els.lightboxTime.textContent = timeAgo(p.createdAt);
+}
+
+function nextPhoto() {
+  if (photos.length === 0) return;
+  currentIndex = (currentIndex + 1) % photos.length;
+  updateLightboxImage();
+}
+
+function prevPhoto() {
+  if (photos.length === 0) return;
+  currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+  updateLightboxImage();
+}
+
+/* ================= 떠다니는 이모지 ================= */
+function renderFloaties() {
+  const emojis = ["🏖️", "🍉", "⛱️", "🛟"];
+  els.floaties.innerHTML = "";
+  const positions = [
+    { left: "8%", top: "20%" },
+    { left: "20%", top: "60%" },
+    { left: "78%", top: "55%" },
+    { left: "88%", top: "22%" },
+    { left: "45%", top: "12%" },
+    { left: "60%", top: "70%" }
+  ];
+  positions.forEach((pos, i) => {
+    const span = document.createElement("span");
+    span.textContent = emojis[i % emojis.length];
+    span.style.left = pos.left;
+    span.style.top = pos.top;
+    span.style.animationDelay = `${i * 0.6}s`;
+    span.style.animationDuration = `${5 + (i % 3)}s`;
+    els.floaties.appendChild(span);
+  });
+}
+
+/* ================= 바다 위 떠오르는 방명록 (큐 + 고정 슬롯) =================
+   동작 방식:
+   1) 방명록 글이 들어오면 enqueueFloatMessage()로 FIFO 큐(floatQueue)에 push.
+   2) processFloatQueue()가 비어있는 슬롯(최대 5개)을 찾아 큐의 맨 앞 항목을 표시.
+      빈 슬롯이 없으면 큐에 그대로 대기.
+   3) 슬롯에 표시된 메시지는 7초(FLOAT_DISPLAY_MS) 뒤 퇴장 애니메이션을 시작하고,
+      퇴장이 끝나면(추가 0.6초) 슬롯을 비우고 다시 processFloatQueue()를 호출해
+      큐에 남은 다음 항목을 그 슬롯에 채운다. (슬롯별 setTimeout으로 관리)
+   4) document.hidden이면 processFloatQueue()가 즉시 반환되어 새로 표시하지 않고
+      큐에 쌓아두기만 한다. visibilitychange로 다시 보이면 이어서 처리한다.
+   5) 타이머는 슬롯이 비워질 때(clearAllFloatMessages 포함) 항상 정리되어 누수가 없다.
+   ================================================================= */
+function initFloatSlots() {
+  floatSlots = Array.from({ length: FLOAT_SLOT_COUNT }, () => ({ busy: false, timeoutId: null, el: null }));
+}
+
+function getFloatSlotPosition(slotIndex) {
+  const top = FLOAT_SLOT_TOPS[slotIndex % FLOAT_SLOT_TOPS.length];
+  const baseLeft = FLOAT_SLOT_LEFTS[slotIndex % FLOAT_SLOT_LEFTS.length];
+  const jitter = Math.random() * 10 - 5; // -5% ~ +5%
+  const left = Math.min(62, Math.max(2, baseLeft + jitter));
+  return { top: `${top}%`, left: `${left}%` };
+}
+
+function showInSlot(slotIndex, item) {
+  const slot = floatSlots[slotIndex];
+  if (!slot || !els.floatingMsgs) return;
+  slot.busy = true;
+
+  const pos = getFloatSlotPosition(slotIndex);
+  const wrap = document.createElement("div");
+  wrap.className = "float-msg";
+  wrap.style.top = pos.top;
+  wrap.style.left = pos.left;
+  wrap.style.animationDelay = `${(Math.random() * 1.4).toFixed(2)}s`;
+
+  const inner = document.createElement("div");
+  inner.className = "float-msg-inner";
+  inner.appendChild(document.createTextNode("🐚 "));
+  const nameEl = document.createElement("span");
+  nameEl.className = "fm-name";
+  nameEl.textContent = item.name || "익명"; // XSS 방지: textContent만 사용
+  inner.appendChild(nameEl);
+  inner.appendChild(document.createTextNode(" · " + (item.msg || "")));
+  wrap.appendChild(inner);
+
+  els.floatingMsgs.appendChild(wrap);
+  slot.el = wrap;
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      inner.classList.add("visible");
+    });
+  });
+
+  slot.timeoutId = setTimeout(() => {
+    inner.classList.remove("visible");
+    inner.classList.add("leaving");
+    slot.timeoutId = setTimeout(() => {
+      if (slot.el && slot.el.parentNode) slot.el.parentNode.removeChild(slot.el);
+      slot.el = null;
+      slot.busy = false;
+      slot.timeoutId = null;
+      processFloatQueue();
+    }, FLOAT_EXIT_MS);
+  }, FLOAT_DISPLAY_MS - FLOAT_EXIT_MS);
+}
+
+function processFloatQueue() {
+  if (!guestbookOn) {
+    floatQueue = [];
+    return;
+  }
+  if (document.hidden) return; // 탭이 숨겨진 동안은 새로 표시하지 않고 큐에 유지
+  if (floatQueue.length === 0) return;
+  const freeIdx = floatSlots.findIndex((s) => !s.busy);
+  if (freeIdx === -1) return; // 빈 슬롯이 없으면 대기
+  const item = floatQueue.shift();
+  showInSlot(freeIdx, item);
+  if (floatQueue.length > 0) processFloatQueue(); // 남은 빈 슬롯이 더 있다면 이어서 채움
+}
+
+function enqueueFloatMessage(item) {
+  if (prefersReducedMotion) return;
+  if (!guestbookOn) return;
+  floatQueue.push(item);
+  processFloatQueue();
+}
+
+function clearAllFloatMessages() {
+  floatQueue = [];
+  floatSlots.forEach((slot) => {
+    if (slot.timeoutId) {
+      clearTimeout(slot.timeoutId);
+      slot.timeoutId = null;
+    }
+    if (slot.el && slot.el.parentNode) slot.el.parentNode.removeChild(slot.el);
+    slot.el = null;
+    slot.busy = false;
+  });
+}
+
+function startPreviewFloatCycle() {
+  if (isConfigured || prefersReducedMotion) return;
+  let i = 0;
+  const pushPreview = () => {
+    if (!guestbookOn) return;
+    const sample = PREVIEW_GUESTBOOK[i % PREVIEW_GUESTBOOK.length];
+    enqueueFloatMessage({ id: `preview-float-${Date.now()}-${i}`, name: sample.name, msg: sample.msg });
+    i++;
+  };
+  pushPreview();
+  floatPreviewTimer = setInterval(pushPreview, 20000);
+}
+
+/* ================= 방명록 표시 ON/OFF (관리자 설정) ================= */
+function updateAdminToggleUI() {
+  if (!els.adminGuestbookToggle) return;
+  els.adminGuestbookToggle.classList.toggle("on", guestbookOn);
+  els.adminGuestbookToggle.setAttribute("aria-checked", guestbookOn ? "true" : "false");
+}
+
+function applyGuestbookOnState() {
+  updateAdminToggleUI();
+  if (guestbookOn) {
+    els.guestbookForm.classList.remove("disabled");
+    els.guestbookOffNotice.classList.remove("show");
+  } else {
+    els.guestbookForm.classList.add("disabled");
+    els.guestbookOffNotice.classList.add("show");
+    clearAllFloatMessages();
+  }
+}
+
+function subscribeSettings() {
+  if (!isConfigured || !db) {
+    guestbookOn = true; // 미리보기 모드는 항상 기본 ON으로 동작
+    applyGuestbookOnState();
+    return;
+  }
+  try {
+    const ref = doc(db, "settings", "site");
+    onSnapshot(
+      ref,
+      (snap) => {
+        const data = snap.exists() ? snap.data() : null;
+        guestbookOn = data && typeof data.guestbookOn === "boolean" ? data.guestbookOn : true; // 문서 없으면 기본 ON
+        applyGuestbookOnState();
+      },
+      (err) => {
+        console.error("설정 구독 오류:", err);
+        guestbookOn = true; // 에러 시에도 기본 ON으로 동작
+        applyGuestbookOnState();
+      }
+    );
+  } catch (err) {
+    console.error("설정 쿼리 생성 오류:", err);
+  }
+}
+
+async function handleAdminGuestbookToggle() {
+  if (!isAdmin) return;
+  if (!isConfigured || !db) {
+    showToast("미리보기 모드에서는 사용할 수 없어요 😅");
+    return;
+  }
+  const next = !guestbookOn;
+  try {
+    await setDoc(doc(db, "settings", "site"), { guestbookOn: next }, { merge: true });
+    showToast(next ? "바다 방명록을 켰어요 🌊" : "바다 방명록을 껐어요 🙏");
+  } catch (err) {
+    console.error("설정 저장 실패:", err);
+    showToast("설정 저장 중 오류가 발생했어요 😢");
+  }
+}
+
+/* ================= 방명록 ================= */
+const GUESTBOOK_ICONS = ["🐚", "🌊", "⭐", "🏝️", "🐬", "🦀"];
+const PREVIEW_GUESTBOOK = [
+  { id: "preview-1", name: "민지", msg: "다들 이번 MT 진짜 최고였어요! 바다 보면서 먹은 삼겹살 잊지 못할 듯 😆", createdAt: new Date(Date.now() - 1000 * 60 * 42), edited: false },
+  { id: "preview-2", name: "현우", msg: "필름 사진 컨셉 너무 예뻐요 다들 사진 많이 올려주세요~", createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3), edited: false },
+  { id: "preview-3", name: "소라", msg: "야식 라면 존맛... 다음 MT도 기대됩니다 🍜", createdAt: new Date(Date.now() - 1000 * 60 * 60 * 20), edited: true }
+];
+
+let guestbookEntries = [];
+const guestbookUIState = {}; // entryId -> "confirm" | "edit" | undefined
+
+const GUESTBOOK_MSG_MAX = 30;
+
+function updateGuestbookCharCount() {
+  const len = els.guestbookMsgInput.value.length;
+  els.guestbookCharCount.textContent = `${len}/${GUESTBOOK_MSG_MAX}`;
+}
+
+function handleGuestbookMsgInput() {
+  if (els.guestbookMsgInput.value.length > GUESTBOOK_MSG_MAX) {
+    els.guestbookMsgInput.value = els.guestbookMsgInput.value.slice(0, GUESTBOOK_MSG_MAX);
+  }
+  updateGuestbookCharCount();
+}
+
+function renderGuestbook() {
+  els.guestbookList.innerHTML = "";
+  const list = isConfigured ? guestbookEntries : PREVIEW_GUESTBOOK;
+
+  if (list.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "guestbook-empty";
+    empty.textContent = "아직 방명록이 없어요. 첫 마디를 남겨보세요! 🐚";
+    els.guestbookList.appendChild(empty);
+    return;
+  }
+
+  list.forEach((entry, i) => {
+    const uiMode = guestbookUIState[entry.id];
+    const item = document.createElement("div");
+    item.className = "guestbook-entry";
+
+    const icon = document.createElement("div");
+    icon.className = "guestbook-entry-icon";
+    icon.textContent = GUESTBOOK_ICONS[i % GUESTBOOK_ICONS.length];
+    item.appendChild(icon);
+
+    const body = document.createElement("div");
+    body.className = "guestbook-entry-body";
+
+    const head = document.createElement("div");
+    head.className = "guestbook-entry-head";
+    const nameEl = document.createElement("span");
+    nameEl.className = "guestbook-entry-name";
+    nameEl.textContent = entry.name || "익명"; // XSS 방지: textContent만 사용
+    const timeEl = document.createElement("span");
+    timeEl.className = "guestbook-entry-time";
+    timeEl.textContent = timeAgo(entry.createdAt);
+    head.appendChild(nameEl);
+    head.appendChild(timeEl);
+    if (entry.edited) {
+      const editedEl = document.createElement("span");
+      editedEl.className = "guestbook-entry-edited";
+      editedEl.textContent = "(수정됨)";
+      head.appendChild(editedEl);
+    }
+    body.appendChild(head);
+
+    const canManage = isAdmin && isConfigured;
+
+    if (uiMode === "edit" && canManage) {
+      const textarea = document.createElement("textarea");
+      textarea.className = "guestbook-edit-textarea";
+      textarea.maxLength = GUESTBOOK_MSG_MAX;
+      textarea.value = entry.msg || "";
+      body.appendChild(textarea);
+
+      const actions = document.createElement("div");
+      actions.className = "guestbook-entry-actions";
+
+      const saveBtn = document.createElement("button");
+      saveBtn.type = "button";
+      saveBtn.textContent = "저장";
+      saveBtn.addEventListener("click", async () => {
+        const newMsg = textarea.value.trim();
+        if (!newMsg) {
+          showToast("메시지를 입력해주세요.");
+          return;
+        }
+        if (newMsg.length > GUESTBOOK_MSG_MAX) {
+          showToast(`메시지는 ${GUESTBOOK_MSG_MAX}자 이내로 남겨주세요.`);
+          return;
+        }
+        try {
+          await updateDoc(doc(db, "guestbook", entry.id), { msg: newMsg, edited: true });
+          delete guestbookUIState[entry.id];
+          showToast("방명록을 수정했어요 ✏️");
+        } catch (err) {
+          console.error("방명록 수정 실패:", err);
+          showToast("수정 중 오류가 발생했어요 😢");
+        }
+      });
+
+      const cancelBtn = document.createElement("button");
+      cancelBtn.type = "button";
+      cancelBtn.textContent = "취소";
+      cancelBtn.addEventListener("click", () => {
+        delete guestbookUIState[entry.id];
+        renderGuestbook();
+      });
+
+      actions.appendChild(saveBtn);
+      actions.appendChild(cancelBtn);
+      body.appendChild(actions);
+    } else {
+      const msgEl = document.createElement("p");
+      msgEl.className = "guestbook-entry-msg";
+      msgEl.textContent = entry.msg || ""; // XSS 방지: textContent만 사용
+      body.appendChild(msgEl);
+
+      if (canManage) {
+        const actions = document.createElement("div");
+        actions.className = "guestbook-entry-actions";
+
+        if (uiMode === "confirm") {
+          const text = document.createElement("span");
+          text.textContent = "정말 삭제할까요?";
+          actions.appendChild(text);
+
+          const delBtn = document.createElement("button");
+          delBtn.type = "button";
+          delBtn.className = "danger-btn";
+          delBtn.textContent = "삭제";
+          delBtn.addEventListener("click", async () => {
+            try {
+              await deleteDoc(doc(db, "guestbook", entry.id));
+              delete guestbookUIState[entry.id];
+              showToast("방명록을 삭제했어요 🗑️");
+            } catch (err) {
+              console.error("방명록 삭제 실패:", err);
+              showToast("삭제 중 오류가 발생했어요 😢");
+            }
+          });
+
+          const cancelBtn = document.createElement("button");
+          cancelBtn.type = "button";
+          cancelBtn.textContent = "취소";
+          cancelBtn.addEventListener("click", () => {
+            delete guestbookUIState[entry.id];
+            renderGuestbook();
+          });
+
+          actions.appendChild(delBtn);
+          actions.appendChild(cancelBtn);
+        } else {
+          const editBtn = document.createElement("button");
+          editBtn.type = "button";
+          editBtn.textContent = "✏️ 수정";
+          editBtn.addEventListener("click", () => {
+            guestbookUIState[entry.id] = "edit";
+            renderGuestbook();
+          });
+
+          const delBtn = document.createElement("button");
+          delBtn.type = "button";
+          delBtn.className = "danger-btn";
+          delBtn.textContent = "🗑️ 삭제";
+          delBtn.addEventListener("click", () => {
+            guestbookUIState[entry.id] = "confirm";
+            renderGuestbook();
+          });
+
+          actions.appendChild(editBtn);
+          actions.appendChild(delBtn);
+        }
+
+        body.appendChild(actions);
+      }
+    }
+
+    item.appendChild(body);
+    els.guestbookList.appendChild(item);
+  });
+}
+
+async function handleGuestbookSubmit(e) {
+  e.preventDefault();
+
+  if (!guestbookOn) {
+    showToast("관리자가 방명록을 잠시 꺼두었어요 🙏");
+    return;
+  }
+
+  const name = els.guestbookNameInput.value.trim();
+  const msg = els.guestbookMsgInput.value.trim();
+
+  if (!name) {
+    showToast("이름을 입력해주세요.");
+    return;
+  }
+  if (!msg) {
+    showToast("메시지를 입력해주세요.");
+    return;
+  }
+  if (msg.length > GUESTBOOK_MSG_MAX) {
+    showToast(`메시지는 ${GUESTBOOK_MSG_MAX}자 이내로 남겨주세요.`);
+    return;
+  }
+
+  if (!isConfigured || !db) {
+    showToast("⚙️ 아직 서버 연결 전이에요. 가이드를 따라 설정을 완료해주세요!");
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "guestbook"), {
+      name,
+      msg,
+      createdAt: serverTimestamp(),
+      edited: false
+    });
+    showToast("방명록에 남겼어요! ✍️");
+    els.guestbookForm.reset();
+    updateGuestbookCharCount();
+  } catch (err) {
+    console.error("방명록 작성 실패:", err);
+    showToast("방명록 작성 중 오류가 발생했어요 😢");
+  }
+}
+
+function subscribeGuestbook() {
+  if (!isConfigured || !db) {
+    guestbookEntries = [];
+    renderGuestbook();
+    return;
+  }
+  try {
+    const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"));
+    let firstSnapshot = true;
+    onSnapshot(
+      q,
+      (snapshot) => {
+        guestbookEntries = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+        renderGuestbook();
+
+        if (firstSnapshot) {
+          firstSnapshot = false;
+          /* 최초 스냅샷: 최신 3개만 큐에 넣어 분위기 연출 (오래된 순으로 자연스럽게) */
+          guestbookEntries.slice(0, 3).slice().reverse().forEach((entry) => {
+            if (!floatShownIds.has(entry.id)) {
+              floatShownIds.add(entry.id);
+              enqueueFloatMessage({ id: entry.id, name: entry.name, msg: entry.msg });
+            }
+          });
+        } else {
+          /* 이후: 실시간으로 새로 추가된(added) 글만 큐에 push, 중복 방지 */
+          snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+              const entry = { id: change.doc.id, ...change.doc.data() };
+              if (!floatShownIds.has(entry.id)) {
+                floatShownIds.add(entry.id);
+                enqueueFloatMessage({ id: entry.id, name: entry.name, msg: entry.msg });
+              }
+            }
+          });
+        }
+      },
+      (err) => {
+        console.error("방명록 구독 오류:", err);
+        showToast("방명록을 불러오지 못했어요 😢");
+      }
+    );
+  } catch (err) {
+    console.error("방명록 쿼리 생성 오류:", err);
+    showToast("방명록을 불러오는 중 오류가 발생했어요 😢");
+  }
+}
+
+/* ================= 관리자 모드 ================= */
+function openAdminModal() {
+  els.adminModalOverlay.classList.add("open");
+  if (isAdmin) {
+    els.adminModalLogin.style.display = "none";
+    els.adminModalActive.style.display = "block";
+    updateAdminToggleUI();
+  } else {
+    els.adminModalLogin.style.display = "block";
+    els.adminModalActive.style.display = "none";
+    els.adminPasswordInput.value = "";
+    setTimeout(() => els.adminPasswordInput.focus(), 50);
+  }
+}
+
+function closeAdminModal() {
+  els.adminModalOverlay.classList.remove("open");
+}
+
+function handleAdminConfirm() {
+  const input = els.adminPasswordInput.value;
+  if (input === ADMIN_PASSWORD) {
+    isAdmin = true;
+    els.fabAdmin.classList.add("active");
+    showToast("관리자 모드 켜짐 🔧");
+    closeAdminModal();
+    renderGuestbook();
+    renderGrid();
+  } else {
+    showToast("비밀번호가 달라요");
+  }
+}
+
+function handleAdminOff() {
+  isAdmin = false;
+  els.fabAdmin.classList.remove("active");
+  closeAdminModal();
+  renderGuestbook();
+  renderGrid();
+}
+
+/* ================= 이벤트 바인딩 ================= */
+function bindEvents() {
+  els.ctaUpload.addEventListener("click", () => {
+    els.uploadSection.scrollIntoView({ behavior: "smooth" });
+  });
+
+  els.selectBtn.addEventListener("click", () => {
+    if (!isConfigured) {
+      showToast("⚙️ 아직 서버 연결 전이에요. 가이드를 따라 설정을 완료해주세요!");
+      return;
+    }
+    els.fileInput.click();
+  });
+
+  els.fileInput.addEventListener("change", () => {
+    if (els.fileInput.files && els.fileInput.files.length > 0) {
+      handleFiles(els.fileInput.files);
+    }
+    els.fileInput.value = "";
+  });
+
+  const triggerCamera = () => {
+    if (!isConfigured) {
+      showToast("⚙️ 아직 서버 연결 전이에요. 가이드를 따라 설정을 완료해주세요!");
+      return;
+    }
+    els.cameraInput.click();
+  };
+  els.cameraBtn.addEventListener("click", triggerCamera);
+  els.fabCamera.addEventListener("click", triggerCamera);
+
+  els.cameraInput.addEventListener("change", () => {
+    if (els.cameraInput.files && els.cameraInput.files.length > 0) {
+      handleFiles(els.cameraInput.files);
+    }
+    els.cameraInput.value = "";
+  });
+
+  els.downloadAllBtn.addEventListener("click", handleDownloadAll);
+
+  els.dropzone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    els.dropzone.classList.add("dragover");
+  });
+  els.dropzone.addEventListener("dragleave", () => {
+    els.dropzone.classList.remove("dragover");
+  });
+  els.dropzone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    els.dropzone.classList.remove("dragover");
+    if (!isConfigured) {
+      showToast("⚙️ 아직 서버 연결 전이에요. 가이드를 따라 설정을 완료해주세요!");
+      return;
+    }
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFiles(e.dataTransfer.files);
+    }
+  });
+
+  els.lightboxClose.addEventListener("click", closeLightbox);
+  els.lightboxPrev.addEventListener("click", prevPhoto);
+  els.lightboxNext.addEventListener("click", nextPhoto);
+  els.lightbox.addEventListener("click", (e) => {
+    if (e.target === els.lightbox) closeLightbox();
+  });
+
+  els.guestbookForm.addEventListener("submit", handleGuestbookSubmit);
+  els.guestbookMsgInput.addEventListener("input", handleGuestbookMsgInput);
+
+  els.fabAdmin.addEventListener("click", openAdminModal);
+  els.adminModalCancel.addEventListener("click", closeAdminModal);
+  els.adminModalClose.addEventListener("click", closeAdminModal);
+  els.adminModalConfirm.addEventListener("click", handleAdminConfirm);
+  els.adminModalOff.addEventListener("click", handleAdminOff);
+  els.adminGuestbookToggle.addEventListener("click", handleAdminGuestbookToggle);
+  els.adminModalOverlay.addEventListener("click", (e) => {
+    if (e.target === els.adminModalOverlay) closeAdminModal();
+  });
+  els.adminPasswordInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAdminConfirm();
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (els.lightbox.classList.contains("open")) {
+      if (e.key === "Escape") closeLightbox();
+      else if (e.key === "ArrowRight") nextPhoto();
+      else if (e.key === "ArrowLeft") prevPhoto();
+      return;
+    }
+    if (els.adminModalOverlay.classList.contains("open") && e.key === "Escape") {
+      closeAdminModal();
+    }
+  });
+
+  els.lightbox.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
+
+  els.lightbox.addEventListener("touchend", (e) => {
+    if (touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) {
+      if (dx < 0) nextPhoto();
+      else prevPhoto();
+    }
+    touchStartX = null;
+  }, { passive: true });
+
+  /* 탭이 다시 보일 때 대기 중인 떠다니는 방명록 큐를 이어서 처리 (숨김 중엔 큐 폭주 방지) */
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) processFloatQueue();
+  });
+}
+
+/* ================= Firestore 연동 ================= */
+function subscribePhotos() {
+  if (!isConfigured || !db) {
+    photos = [];
+    renderAll();
+    return;
+  }
+  try {
+    const q = query(collection(db, "photos"), orderBy("createdAt", "desc"));
+    onSnapshot(
+      q,
+      (snapshot) => {
+        photos = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+        renderAll();
+      },
+      (err) => {
+        console.error("Firestore 구독 오류:", err);
+        showToast("사진을 불러오지 못했어요 😢");
+      }
+    );
+  } catch (err) {
+    console.error("Firestore 쿼리 생성 오류:", err);
+    showToast("사진 목록을 불러오는 중 오류가 발생했어요 😢");
+  }
+}
+
+/* ================= 초기화 ================= */
+function init() {
+  initDom();
+  if (!isConfigured) {
+    els.banner.style.display = "block";
+  }
+  renderFloaties();
+  initFloatSlots();
+  bindEvents();
+  renderAll();
+  subscribePhotos();
+  updateGuestbookCharCount();
+  renderGuestbook();
+  subscribeGuestbook();
+  subscribeSettings();
+  if (!isConfigured) {
+    startPreviewFloatCycle();
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
