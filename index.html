@@ -262,8 +262,58 @@
     0%,100%{transform:translateY(0);}
     50%{transform:translateY(-6px);}
   }
+
+  /* ---------- 관리자 고정 말풍선 (상시 노출) ---------- */
+  .float-msg-pinned{
+    position:absolute;
+    top:8%;
+    left:3%;
+    z-index:4;
+    max-width:min(38vw,340px);
+    pointer-events:none;
+    animation:fmPinnedBob 3.8s ease-in-out infinite;
+    will-change:transform;
+  }
+  @keyframes fmPinnedBob{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-7px);}
+  }
+  .float-msg-pinned-inner{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    flex-wrap:wrap;
+    max-width:min(74vw,360px);
+    padding:12px 22px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.68);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border:2px solid rgba(255,209,102,0.95);
+    box-shadow:
+      0 0 0 3px rgba(255,111,97,0.18),
+      0 10px 26px rgba(255,159,28,0.35),
+      0 0 26px rgba(255,209,102,0.6);
+    color:var(--ink);
+    font-size:1rem;
+    font-weight:700;
+    line-height:1.4;
+    text-align:center;
+    word-break:break-word;
+    opacity:0;
+    transform:translateY(-14px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .float-msg-pinned-inner.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .float-msg-pinned-inner .fm-name{font-weight:800;color:#b3311f;}
   @media (max-width:640px){
     .float-msg-inner{font-size:0.76rem;padding:8px 12px;max-width:62vw;}
+    .float-msg-pinned{top:30%;left:3%;max-width:72vw;}
+    .float-msg-pinned-inner{font-size:0.8rem;padding:8px 14px;max-width:70vw;}
   }
 
   .hero-content{
@@ -1058,11 +1108,12 @@
     .guestbook-entry-actions button{min-height:44px;}
   }
   @media (prefers-reduced-motion: reduce){
-    .filmstrip-track,.wave-row svg,.floaties span,.sun,.palm-crown-sway,.crab,.crab-claw-l,.crab-claw-r,.float-msg{
+    .filmstrip-track,.wave-row svg,.floaties span,.sun,.palm-crown-sway,.crab,.crab-claw-l,.crab-claw-r,.float-msg,.float-msg-pinned{
       animation-play-state:paused !important;
       animation:none !important;
     }
-    #floating-msgs{display:none;}
+    /* 일반 순환 말풍선(.float-msg)은 JS에서 생성 자체를 막으므로 컨테이너를
+       통째로 숨기지 않고, 관리자 고정 말풍선(.float-msg-pinned)은 표시를 유지한다. */
   }
 </style>
 </head>
@@ -1451,15 +1502,21 @@ const galleryUIState = {}; // photoId -> "confirm" | undefined
 /* ---- 바다 위 떠오르는 방명록 상태 ---- */
 let guestbookOn = true; // settings/site 문서의 guestbookOn (기본 ON)
 const prefersReducedMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-const FLOAT_SLOT_COUNT = 5;
+const FLOAT_SLOT_COUNT = 4; // 일반 글 동시 4개 (관리자 고정 1개 포함 총 5개)
 const FLOAT_DISPLAY_MS = 7000; // 슬롯 하나가 전체로 표시되는 시간
 const FLOAT_EXIT_MS = 600; // 퇴장 애니메이션 시간
-const FLOAT_SLOT_TOPS = [6, 24, 44, 64, 82]; // 컨테이너 기준 세로 위치(%)
-const FLOAT_SLOT_LEFTS = [8, 48, 18, 58, 32]; // 컨테이너 기준 가로 위치(%)
+const FLOAT_SLOT_TOPS = [40, 58, 74, 48]; // 컨테이너 기준 세로 위치(%) — 중앙 문구/버튼 아래 바다 영역만 사용
+const FLOAT_SLOT_LEFTS = [58, 14, 38, 78]; // 컨테이너 기준 가로 위치(%) — 관리자 고정(좌상단) 자리를 피해 분산
 let floatSlots = []; // { busy, timeoutId, el }
 let floatQueue = []; // FIFO 큐: { id, name, msg }
 const floatShownIds = new Set(); // 이미 큐에 넣은 방명록 doc id (중복 방지)
 let floatPreviewTimer = null;
+
+/* ---- 관리자 고정 말풍선 상태 ---- */
+const ADMIN_PINNED_NAMES = ["임재영", "재영"];
+let currentPinnedEntry = null; // 현재 고정 노출 중인 관리자 글 (없으면 null)
+let pinnedBubbleEl = null; // #floating-msgs 안 고정 말풍선 DOM
+const SAMPLE_PINNED_ENTRY = { id: "preview-pinned", name: "임재영", msg: "오늘 MT 최고로 즐기자!" };
 
 const PLACEHOLDER_ITEMS = [
   { emoji: "🏖️", gradient: "linear-gradient(135deg,#ff9a8b,#ff6a88)" },
@@ -2119,6 +2176,73 @@ function clearAllFloatMessages() {
   });
 }
 
+/* ================= 관리자 고정 말풍선 (상시 노출) =================
+   판별: entry.admin === true 이거나 이름이 "임재영"/"재영"과 정확히 일치.
+   대상 중 최신(createdAt desc) 1개를 #floating-msgs 안 상단 중앙에 상시 노출한다.
+   타이머 없이 계속 표시되며, 내용이 바뀌면(add/modify/remove) 실시간으로 갱신된다.
+   ================================================================= */
+function isAdminEntry(entry) {
+  if (!entry) return false;
+  if (entry.admin === true) return true;
+  const n = (entry.name || "").trim();
+  return ADMIN_PINNED_NAMES.includes(n);
+}
+
+/* list는 createdAt 기준 내림차순(desc)으로 정렬되어 있다고 가정 (guestbook 쿼리와 동일) */
+function findPinnedAdminEntry(list) {
+  if (!Array.isArray(list)) return null;
+  for (const entry of list) {
+    if (isAdminEntry(entry)) return entry;
+  }
+  return null;
+}
+
+function removePinnedBubble() {
+  if (pinnedBubbleEl && pinnedBubbleEl.parentNode) {
+    pinnedBubbleEl.parentNode.removeChild(pinnedBubbleEl);
+  }
+  pinnedBubbleEl = null;
+}
+
+function renderPinnedBubbleContent(entry) {
+  if (!pinnedBubbleEl) return;
+  const inner = pinnedBubbleEl.querySelector(".float-msg-pinned-inner");
+  if (!inner) return;
+  inner.innerHTML = "";
+  inner.appendChild(document.createTextNode("👑 "));
+  const nameEl = document.createElement("span");
+  nameEl.className = "fm-name";
+  nameEl.textContent = entry.name || "익명"; // XSS 방지: textContent만 사용
+  inner.appendChild(nameEl);
+  inner.appendChild(document.createTextNode(" · " + (entry.msg || "")));
+}
+
+/* guestbookOn과 currentPinnedEntry 상태에 맞춰 고정 말풍선 DOM을 갱신한다.
+   - 대상이 없거나 방명록 표시가 꺼져있으면 숨긴다.
+   - 이미 떠있으면 내용만 갱신(수정 반영)하고, 새로 등장할 때만 fade-in한다. */
+function updatePinnedDisplay() {
+  if (!els.floatingMsgs) return;
+  if (!guestbookOn || !currentPinnedEntry) {
+    removePinnedBubble();
+    return;
+  }
+  if (!pinnedBubbleEl) {
+    pinnedBubbleEl = document.createElement("div");
+    pinnedBubbleEl.className = "float-msg-pinned";
+    pinnedBubbleEl.setAttribute("aria-hidden", "true");
+    const inner = document.createElement("div");
+    inner.className = "float-msg-pinned-inner";
+    pinnedBubbleEl.appendChild(inner);
+    els.floatingMsgs.appendChild(pinnedBubbleEl);
+    renderPinnedBubbleContent(currentPinnedEntry);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => inner.classList.add("visible"));
+    });
+  } else {
+    renderPinnedBubbleContent(currentPinnedEntry);
+  }
+}
+
 function startPreviewFloatCycle() {
   if (isConfigured || prefersReducedMotion) return;
   let i = 0;
@@ -2144,10 +2268,12 @@ function applyGuestbookOnState() {
   if (guestbookOn) {
     els.guestbookForm.classList.remove("disabled");
     els.guestbookOffNotice.classList.remove("show");
+    updatePinnedDisplay(); // OFF -> ON 복귀 시 고정 말풍선 다시 표시
   } else {
     els.guestbookForm.classList.add("disabled");
     els.guestbookOffNotice.classList.add("show");
     clearAllFloatMessages();
+    removePinnedBubble(); // 고정 말풍선도 함께 숨김
   }
 }
 
@@ -2408,12 +2534,14 @@ async function handleGuestbookSubmit(e) {
   }
 
   try {
-    await addDoc(collection(db, "guestbook"), {
+    const payload = {
       name,
       msg,
       createdAt: serverTimestamp(),
       edited: false
-    });
+    };
+    if (isAdmin) payload.admin = true; // 관리자 모드에서 작성한 글은 고정 노출 대상으로 표시
+    await addDoc(collection(db, "guestbook"), payload);
     showToast("방명록에 남겼어요! ✍️");
     els.guestbookForm.reset();
     updateGuestbookCharCount();
@@ -2438,20 +2566,30 @@ function subscribeGuestbook() {
         guestbookEntries = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
         renderGuestbook();
 
+        /* 관리자 고정 말풍선: add/modify/remove 모두 매 스냅샷마다 전체 목록에서
+           최신 관리자 글을 다시 찾아 반영한다 (수정 시 내용 교체, 삭제 시 다음 글로 교체). */
+        currentPinnedEntry = findPinnedAdminEntry(guestbookEntries);
+        updatePinnedDisplay();
+        const pinnedId = currentPinnedEntry ? currentPinnedEntry.id : null;
+
         if (firstSnapshot) {
           firstSnapshot = false;
-          /* 최초 스냅샷: 최신 3개만 큐에 넣어 분위기 연출 (오래된 순으로 자연스럽게) */
+          /* 최초 스냅샷: 최신 3개만 큐에 넣어 분위기 연출 (오래된 순으로 자연스럽게).
+             단, 고정 노출 중인 관리자 글은 중복 노출을 막기 위해 큐에서 제외한다. */
           guestbookEntries.slice(0, 3).slice().reverse().forEach((entry) => {
+            if (entry.id === pinnedId) return;
             if (!floatShownIds.has(entry.id)) {
               floatShownIds.add(entry.id);
               enqueueFloatMessage({ id: entry.id, name: entry.name, msg: entry.msg });
             }
           });
         } else {
-          /* 이후: 실시간으로 새로 추가된(added) 글만 큐에 push, 중복 방지 */
+          /* 이후: 실시간으로 새로 추가된(added) 글만 큐에 push, 중복 방지.
+             고정 노출 중인 관리자 글은 순환 큐에서 제외한다. */
           snapshot.docChanges().forEach((change) => {
             if (change.type === "added") {
               const entry = { id: change.doc.id, ...change.doc.data() };
+              if (entry.id === pinnedId) return;
               if (!floatShownIds.has(entry.id)) {
                 floatShownIds.add(entry.id);
                 enqueueFloatMessage({ id: entry.id, name: entry.name, msg: entry.msg });
@@ -2668,6 +2806,11 @@ function init() {
   subscribePhotos();
   updateGuestbookCharCount();
   renderGuestbook();
+  if (!isConfigured) {
+    /* 미리보기 모드: 샘플 고정 말풍선 표시 (subscribeSettings가 guestbookOn을
+       확정하면서 updatePinnedDisplay()를 호출하므로 그 전에 대상만 세팅해둔다) */
+    currentPinnedEntry = SAMPLE_PINNED_ENTRY;
+  }
   subscribeGuestbook();
   subscribeSettings();
   if (!isConfigured) {
