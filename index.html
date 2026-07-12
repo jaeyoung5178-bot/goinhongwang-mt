@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>고인홍왕 MT · 사진 공유</title>
-<meta name="description" content="고인홍왕 MT 2026 여름 엠티 사진 공유 페이지">
+<title>인천X홍대X왕십리 MT · 사진 공유</title>
+<meta name="description" content="인천X홍대X왕십리 MT 2026 여름 엠티 사진 공유 페이지">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -322,7 +322,8 @@
     padding-bottom:70px;
   }
   .hero-title{
-    font-size:clamp(2.8rem,10vw,5.6rem);
+    font-size:clamp(1.8rem,7vw,4.6rem);
+    white-space:nowrap;
     color:#083a5e;
     text-shadow:
       0 0 6px rgba(255,255,255,0.95),
@@ -1316,7 +1317,7 @@
   <div id="floating-msgs" aria-hidden="true"></div>
 
   <div class="hero-content">
-    <h1 class="hero-title">고인홍왕 MT</h1>
+    <h1 class="hero-title">인천X홍대X왕십리 MT</h1>
     <p class="hero-subtitle">2026 여름 엠티 · 우리의 추억 저장소 🌊</p>
     <button class="hero-cta" id="cta-upload">📸 사진 올리기</button>
   </div>
@@ -1444,7 +1445,7 @@
 
 <div id="toast-container"></div>
 
-<footer>고인홍왕 MT 🌊 함께한 순간들</footer>
+<footer>인천X홍대X왕십리 MT 🌊 함께한 순간들</footer>
 
 <script type="module">
 /* =======================================================================
@@ -1829,7 +1830,7 @@ async function handleDownloadAll() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "고인홍왕MT_사진모음.zip";
+    a.download = "인천X홍대X왕십리MT_사진모음.zip";
     document.body.appendChild(a);
     a.click();
     a.remove();
